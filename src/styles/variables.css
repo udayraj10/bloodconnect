@@ -1,0 +1,43 @@
+:root {
+  /* Core Brand Colors */
+  --primary: #e10600; /* Main brand red used in logos, primary buttons, active states */
+  --primary-hover: #c80500; /* Darker red variant for hover interactions */
+  --primary-light: #fff0f0; /* Soft red background used behind active nav items and alerts */
+
+  /* Status & Action Colors */
+  --success: #22c55e; /* Rich green for 'Accepted', 'Fulfilled', and check icons */
+  --success-light: #f0fdf4; /* Light green tint background */
+  --warning: #f59e0b; /* Vibrant amber/orange for 'Medium' and 'Pending' states */
+  --warning-light: #fef3c7; /* Light amber tint background */
+  --danger: #ef4444; /* Coral red for 'High' urgency, 'Declined', and delete icons */
+  --danger-light: #fee2e2; /* Light red tint background */
+  --info: #3b82f6; /* Clean blue for info banners, 'Low' urgency, and 'O+' types */
+  --info-light: #eff6ff; /* Light blue tint background */
+
+  /* Neutrals & Text */
+  --white: #ffffff; /* Pure white for containers, cards, and text on dark actions */
+  --bg: #eeeeee; /* Off-white, soft gray-blue used for main app page backgrounds */
+  --black: #0f172a; /* Dark slate/navy for primary titles and heavy headings */
+
+  /* Gray Scale (Borders, Neutral Text, Secondary Elements) */
+  --gray-100: #f1f5f9; /* Very soft gray for alternating table elements or input fields */
+  --gray-300: #cbd5e1; /* Border lines and disabled indicator states */
+  --card-border: #e0e0e0;
+  --gray-600: #64748b; /* Muted gray for body paragraphs, labels, and table headers */
+
+  --shadow-sm:
+    0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.1); /* Use this for standard inputs, select dropdowns, and small buttons (e.g., the "Reset" button) */
+  --shadow-md:
+    0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05); /* Perfect for the table containers, the "Create Blood Request" form box, and individual stat cards */
+  --shadow-lg:
+    0 10px 25px -5px rgba(15, 23, 42, 0.04),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04); /* Ideal for the main top navigation bar or hover states where an item needs to pop out further */
+
+  /* Font family */
+  --font-family: Arial, sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
