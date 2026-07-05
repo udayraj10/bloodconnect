@@ -18,6 +18,7 @@ const defaultValues = {
 }
 
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState("")
@@ -36,6 +37,7 @@ const ChangePassword = () => {
   }, [reset])
 
   const onSubmit = async (data) => {
+    setLoading(true)
     try {
       setStatus("")
       const res = await changePassword(data)
@@ -54,6 +56,8 @@ const ChangePassword = () => {
       setIsOpen(true)
       setMessage(errorMessage)
       setStatus("error")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -108,8 +112,14 @@ const ChangePassword = () => {
           />
         </Box>
       </CardContent>
-      <CardActions sx={{ px: 2, pb: 2, justifyContent: "flex-end" }}>
-        <Button type="submit" variant="contained" fullWidth>
+      <CardActions sx={{ px: 2, pb: 2 }}>
+        <Button
+          type="submit"
+          variant="contained"
+          loading={loading}
+          loadingPosition="start"
+          fullWidth
+        >
           Update Password
         </Button>
       </CardActions>

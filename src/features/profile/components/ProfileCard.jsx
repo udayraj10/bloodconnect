@@ -69,8 +69,11 @@ const ProfileCard = () => {
             >
               <Typography
                 variant="caption"
-                color="text.secondary"
-                sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+                sx={{
+                  textTransform: "uppercase",
+                  letterSpacing: 0.5,
+                  fontWeight: 700,
+                }}
               >
                 {item.label}
               </Typography>

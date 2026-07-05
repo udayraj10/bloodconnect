@@ -8,13 +8,15 @@ import Footer from "../../../components/ui/Footer"
 
 const ProfileScreen = () => {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography variant="h5" component="h1">
+    <Box
+      sx={{ display: "flex", flexDirection: "column", mt: { xs: 2, sm: 1 } }}
+    >
+      {/* <Typography variant="h5" component="h1">
         Profile
       </Typography>
       <Typography variant="subtitle2" gutterBottom>
         Manage your account details
-      </Typography>
+      </Typography> */}
       <Box sx={{ mb: 4 }}>
         <ProfileCard />
         <Divider sx={{ my: 2 }} />

@@ -33,6 +33,7 @@ const UpdateProfile = ({ onEditClick }) => {
   const [status, setStatus] = useState("")
   const [message, setMessage] = useState("")
   const [isOpen, setIsOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues,
@@ -61,6 +62,7 @@ const UpdateProfile = ({ onEditClick }) => {
   }, [user, reset])
 
   const onSubmit = async (data) => {
+    setLoading(true)
     try {
       setStatus("")
 
@@ -89,6 +91,8 @@ const UpdateProfile = ({ onEditClick }) => {
       setIsOpen(true)
       setMessage(errorMessage)
       setStatus("error")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -258,7 +262,12 @@ const UpdateProfile = ({ onEditClick }) => {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button
+              type="submit"
+              loading={loading}
+              loadingPosition="start"
+              variant="contained"
+            >
               Save Changes
             </Button>
           </Box>
