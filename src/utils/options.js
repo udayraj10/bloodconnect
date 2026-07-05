@@ -13,3 +13,9 @@ export const accountTypeOptions = [
   { label: "Individual", id: 1 },
   { label: "Organization", id: 2 },
 ]
+
+export const urgencyOptions = [
+  { label: "NORMAL", id: 1 },
+  { label: "URGENT", id: 2 },
+  { label: "CRITICAL", id: 3 },
+]
