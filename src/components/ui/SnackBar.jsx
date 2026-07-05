@@ -4,17 +4,6 @@ import IconButton from "@mui/material/IconButton"
 import CloseIcon from "@mui/icons-material/Close"
 
 const SnackBar = ({ open, message, handleClose, status }) => {
-  const action = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={handleClose}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
-  )
-
   return (
     <Snackbar
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
