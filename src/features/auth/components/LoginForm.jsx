@@ -17,8 +17,9 @@ import { useAuth } from "../../../context/AuthContext"
 import { loginApi } from "../api/auth.api"
 
 const LoginForm = ({ updateRegister }) => {
-  const { login, loading } = useAuth()
+  const { login } = useAuth()
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -30,6 +31,7 @@ const LoginForm = ({ updateRegister }) => {
   })
 
   const onLogin = async (data) => {
+    setLoading(true)
     try {
       setError("")
 
@@ -46,6 +48,8 @@ const LoginForm = ({ updateRegister }) => {
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again."
       setError(errorMessage)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -106,6 +110,7 @@ const LoginForm = ({ updateRegister }) => {
         <Button
           type="submit"
           loading={loading}
+          loadingPosition="start"
           variant="contained"
           fullWidth
           sx={{ mb: 1 }}

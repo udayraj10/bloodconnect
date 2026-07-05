@@ -19,8 +19,9 @@ import { useAuth } from "../../../context/AuthContext"
 import { bloodGroupOptions, accountTypeOptions } from "../../../utils/options"
 
 const RegisterForm = ({ updateRegister }) => {
-  const { loading, login } = useAuth()
+  const { login } = useAuth()
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -40,6 +41,7 @@ const RegisterForm = ({ updateRegister }) => {
   })
 
   const onRegister = async (data) => {
+    setLoading(true)
     try {
       setError("")
 
@@ -63,6 +65,8 @@ const RegisterForm = ({ updateRegister }) => {
             : "Registration failed. Please try again."
 
       setError(errorMessage)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -227,6 +231,7 @@ const RegisterForm = ({ updateRegister }) => {
         <Button
           type="submit"
           loading={loading}
+          loadingPosition="start"
           variant="contained"
           fullWidth
           sx={{ mb: 1 }}
