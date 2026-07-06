@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom"
 import HomePage from "../pages/HomePage"
 import { AuthPage } from "../pages/AuthPage"
 import OfferPage from "../pages/OfferPage"
-import RequestPage from "../pages/RequestPage"
+import { RequestPage } from "../pages/RequestPage"
+import { BloodRequestDetails } from "../pages/BloodRequestDetails"
 import DonationPage from "../pages/DonationPage"
 import { ProfilePage } from "../pages/ProfilePage"
 import StatsPage from "../pages/StatsPage"
@@ -20,6 +21,8 @@ const AppRoutes = () => {
           <Route index element={<HomePage />} />
 
           <Route path="/requests" element={<RequestPage />} />
+
+          <Route path="/requests/:id" element={<BloodRequestDetails />} />
 
           <Route path="/donations" element={<DonationPage />} />
 
