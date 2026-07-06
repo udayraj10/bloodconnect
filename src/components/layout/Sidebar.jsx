@@ -62,41 +62,52 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
         }}
       >
         <List>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={Link}
-                to={item.path}
-                selected={currentPath === item.path}
-                sx={{
-                  color: "text.primary",
+          {menuItems.map((item) => {
+            const isSelected =
+              item.path === "/"
+                ? currentPath === "/"
+                : currentPath.startsWith(item.path)
 
-                  "&:hover": {
-                    bgcolor: "primary.light",
-                  },
-
-                  "&.Mui-selected": {
-                    bgcolor: "primary.light",
-                    color: "primary.main",
-                  },
-                }}
+            return (
+              <ListItem
+                key={item.text}
+                disablePadding
+                sx={{ display: "block" }}
               >
-                <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontWeight: currentPath === item.path ? 500 : 300,
-                      },
+                <ListItemButton
+                  component={Link}
+                  to={item.path}
+                  selected={isSelected}
+                  sx={{
+                    color: "text.primary",
+
+                    "&:hover": {
+                      bgcolor: "primary.light",
+                    },
+
+                    "&.Mui-selected": {
+                      bgcolor: "primary.light",
+                      color: "primary.main",
                     },
                   }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                >
+                  <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    slotProps={{
+                      primary: {
+                        sx: {
+                          fontWeight: isSelected ? 500 : 300,
+                        },
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            )
+          })}
         </List>
 
         <Box
