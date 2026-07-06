@@ -53,11 +53,11 @@ export const theme = createTheme({
     },
 
     body1: {
-      color: "#64748b",
+      color: "#0f172a",
     },
 
     body2: {
-      color: "#64748b",
+      color: "#0f172a",
     },
   },
 
@@ -72,8 +72,26 @@ export const theme = createTheme({
         root: {
           textTransform: "none",
           fontWeight: 600,
+
+          "&.Mui-disabled": {
+            backgroundColor: "#bbb",
+            color: "#444",
+          },
         },
       },
+
+      variants: [
+        {
+          props: { variant: "outlined" },
+          style: {
+            "&.Mui-disabled": {
+              backgroundColor: "transparent",
+              borderColor: "#aaa",
+              color: "#555",
+            },
+          },
+        },
+      ],
     },
 
     MuiCardHeader: {
@@ -139,6 +157,34 @@ export const theme = createTheme({
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: "#888888",
             borderWidth: "1px",
+          },
+        },
+      },
+    },
+
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within":
+            {
+              outline: "none",
+            },
+
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "transparent !important",
+          },
+
+          "& .MuiDataGrid-cell": {
+            borderColor: "rgba(0, 0, 0, 0.2)",
+          },
+          "& .MuiDataGrid-columnHeader": {
+            borderColor: "rgba(0, 0, 0, 0.2)",
+          },
+          "& .MuiDataGrid-withBorderColor": {
+            borderColor: "rgba(0, 0, 0, 0.2) !important",
           },
         },
       },
