@@ -4,7 +4,8 @@ import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 import Grid from "@mui/material/Grid"
 import { Typography, CircularProgress, Alert, Chip } from "@mui/material" // Added CircularProgress
-import { DataGrid } from "@mui/x-data-grid"
+import Table from "../../../components/ui/Table"
+import TableBox from "../../../components/ui/TableBox"
 import SnackBar from "../../../components/ui/SnackBar"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { formatDate } from "../../../utils/formatDate"
@@ -49,6 +50,8 @@ const BloodRequestDetails = () => {
 
         if (donorsRes.status === 200) {
           setDonors(donorsRes?.data?.data?.content ?? [])
+
+          console.log(setDonors(donorsRes?.data?.data?.content ?? []))
         }
       } catch (error) {
         if (
@@ -127,47 +130,20 @@ const BloodRequestDetails = () => {
         ))}
       </Grid>
 
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: "100vw",
-          overflowX: "auto",
-          background: "#fff",
-          borderRadius: 1,
-        }}
-      >
+      <TableBox>
         <Typography variant="h6" component="h2" sx={{ m: 2, mb: 1 }}>
           Matched Donors
         </Typography>
 
-        <DataGrid
-          columns={columns}
-          rows={donors}
-          loading={loading}
-          disableColumnMenu
-          rowSelection={false}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 5 } },
-          }}
-          pageSizeOptions={[5]}
-          sx={{
-            "& .MuiDataGrid-cell": {
-              px: 2,
-            },
+        <Table columns={columns} requests={donors} loading={loading} />
+      </TableBox>
 
-            "& .MuiDataGrid-columnHeader": {
-              px: 2,
-            },
-          }}
-        />
-
-        <SnackBar
-          open={isOpen}
-          message={message}
-          status={status}
-          handleClose={() => setIsOpen(false)}
-        />
-      </Box>
+      <SnackBar
+        open={isOpen}
+        message={message}
+        handleClose={() => setIsOpen(false)}
+        status={status}
+      />
     </Stack>
   )
 }

@@ -6,7 +6,8 @@ import { cancelRequest } from "../api/request.api"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import { Stack } from "@mui/material"
-import { DataGrid } from "@mui/x-data-grid"
+import Table from "../../../components/ui/Table"
+import TableBox from "../../../components/ui/TableBox"
 import Box from "@mui/material/Box"
 
 const STATIC_COLUMNS = [
@@ -111,15 +112,7 @@ const AllBloodRequests = ({ requests, loadRequests, loading }) => {
   )
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "100vw",
-        overflowX: "auto",
-        background: "#fff",
-        borderRadius: 1,
-      }}
-    >
+    <TableBox>
       <Box
         sx={{
           display: "flex",
@@ -135,29 +128,8 @@ const AllBloodRequests = ({ requests, loadRequests, loading }) => {
         </Typography>
       </Box>
 
-      <DataGrid
-        columns={columns}
-        rows={requests}
-        loading={loading}
-        disableColumnMenu
-        rowSelection={false}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5]}
-        sx={{
-          "& .MuiDataGrid-cell": {
-            px: 2,
-          },
-
-          "& .MuiDataGrid-columnHeader": {
-            px: 2,
-          },
-        }}
-      />
-    </Box>
+      <Table columns={columns} requests={requests} loading={loading} />
+    </TableBox>
   )
 }
 
