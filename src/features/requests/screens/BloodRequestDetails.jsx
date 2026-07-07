@@ -89,7 +89,15 @@ const BloodRequestDetails = () => {
   ]
 
   return (
-    <Stack spacing={3}>
+    <Stack
+      spacing={3}
+      sx={{
+        mt: {
+          xs: 2,
+          sm: 1,
+        },
+      }}
+    >
       <Grid
         container
         spacing={2}
@@ -113,9 +121,7 @@ const BloodRequestDetails = () => {
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {item.label}
               </Typography>
-              <Typography variant="body1" sx={{ textTransform: "capitalize" }}>
-                {item.value}
-              </Typography>
+              <Typography variant="body1">{item.value}</Typography>
             </Box>
           </Grid>
         ))}
