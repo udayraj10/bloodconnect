@@ -13,12 +13,13 @@ import { formatDate } from "../../../utils/formatDate"
 const columns = [
   { field: "fullName", headerName: "Full Name", flex: 1, minWidth: 150 },
   { field: "city", headerName: "City", flex: 1, minWidth: 120 },
-  { field: "bloodGroup", headerName: "Blood Group", width: 120, flex: 1 },
-  { field: "offerStatus", headerName: "Offer Status", width: 130, flex: 1 },
+  { field: "bloodGroup", headerName: "Blood Group", minWidth: 130, flex: 1 },
+  { field: "offerStatus", headerName: "Offer Status", minWidth: 130, flex: 1 },
   {
     field: "offeredAt",
     headerName: "Offered At",
-    width: 180,
+    minWidth: 150,
+    flex: 1,
     valueFormatter: (value) => (value ? formatDate(value) : ""),
   },
 ]

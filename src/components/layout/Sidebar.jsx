@@ -25,7 +25,7 @@ const menuItems = [
   { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
-  { text: "Donations", icon: <WaterDropIcon />, path: "/donations" },
+  { text: "Search", icon: <WaterDropIcon />, path: "/search" },
   { text: "Stats", icon: <BarChartIcon />, path: "/stats" },
 ]
 
