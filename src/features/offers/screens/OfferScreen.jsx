@@ -1,0 +1,18 @@
+import Stack from "@mui/material/Stack"
+import AlertInfo from "../components/AlertInfo"
+import { Divider } from "@mui/material"
+import OffersTable from "../components/OffersTable"
+
+const OfferScreen = () => {
+  return (
+    <Stack spacing={2} sx={{ mt: { xs: 2, sm: 1 } }}>
+      <AlertInfo />
+
+      <Divider />
+
+      <OffersTable />
+    </Stack>
+  )
+}
+
+export default OfferScreen
