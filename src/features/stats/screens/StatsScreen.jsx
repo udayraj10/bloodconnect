@@ -73,6 +73,11 @@ const StatsScreen = () => {
       description: "Number of accepted donation offers from you",
     },
     {
+      label: "Completed Offers",
+      value: stats?.completedOffers ?? "-",
+      description: "Number of completed donation offers from you",
+    },
+    {
       label: "Declined Offers",
       value: stats?.declinedOffers ?? "-",
       description: "Number of declined donation offers from you",
