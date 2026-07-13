@@ -7,7 +7,7 @@ import { OfferDetailsPage } from "../pages/OfferDetailsPage"
 import { RequestPage } from "../pages/RequestPage"
 import { BloodRequestDetails } from "../pages/BloodRequestDetails"
 import { ProfilePage } from "../pages/ProfilePage"
-import StatsPage from "../pages/StatsPage"
+import { StatsPage } from "../pages/StatsPage"
 import AppLayout from "../components/layout/AppLayout"
 import ProtectedRoute from "../components/layout/ProtectedRoute"
 
