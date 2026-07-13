@@ -26,7 +26,7 @@ const menuItems = [
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
   { text: "Search", icon: <WaterDropIcon />, path: "/search" },
-  { text: "Stats", icon: <BarChartIcon />, path: "/stats" },
+  { text: "My Stats", icon: <BarChartIcon />, path: "/stats" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
