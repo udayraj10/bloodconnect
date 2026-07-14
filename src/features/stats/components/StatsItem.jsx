@@ -6,7 +6,7 @@ const StatsItem = ({ data }) => {
   return (
     <Grid container spacing={2}>
       {data.map((item) => (
-        <Grid item size={{ xs: 6, sm: 4, lg: 2.4 }} key={item.label}>
+        <Grid item size={{ xs: 6, sm: 4, lg: 3 }} key={item.label}>
           <Paper
             variant="outlined"
             sx={{
