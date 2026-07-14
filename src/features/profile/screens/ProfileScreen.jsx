@@ -1,24 +1,20 @@
 import Box from "@mui/material/Box"
 import UpdateProfile from "../components/UpdateProfile"
 import { Typography } from "@mui/material"
-import ProfileCard from "../components/ProfileCard"
+import ProfileCard from "../../../components/ui/ProfileCard"
 import Divider from "@mui/material/Divider"
 import ChangePassword from "../components/ChangePassword"
 import Footer from "../../../components/ui/Footer"
+import { useAuth } from "../../../context/AuthContext"
 
 const ProfileScreen = () => {
+  const { user } = useAuth()
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", mt: { xs: 2, sm: 1 } }}
     >
-      {/* <Typography variant="h5" component="h1">
-        Profile
-      </Typography>
-      <Typography variant="subtitle2" gutterBottom>
-        Manage your account details
-      </Typography> */}
       <Box sx={{ mb: 4 }}>
-        <ProfileCard />
+        <ProfileCard user={user} />
         <Divider sx={{ my: 2 }} />
         <Box
           sx={{
