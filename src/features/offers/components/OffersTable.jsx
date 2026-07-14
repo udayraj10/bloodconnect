@@ -75,7 +75,7 @@ const ActionCell = ({
         loading={isAcceptLoading}
         loadingPosition="start"
       >
-        {isAcceptLoading ? "Accepting" : "Accept"}
+        Accept
       </Button>
       <Button
         variant="outlined"
@@ -85,7 +85,7 @@ const ActionCell = ({
         loading={isDeclineLoading}
         loadingPosition="start"
       >
-        {isDeclineLoading ? "Declining" : "Decline"}
+        Decline
       </Button>
     </Stack>
   )
