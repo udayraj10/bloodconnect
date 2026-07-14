@@ -183,7 +183,7 @@ const StatsScreen = () => {
         Overview
       </Typography>
 
-      <Stack spacing={2} direction="row">
+      <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
         <Piechart data={overview} title="Donations & Requests" />
         <Piechart
           data={requestDistribution}
