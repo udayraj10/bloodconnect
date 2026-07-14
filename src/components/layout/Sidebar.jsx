@@ -49,7 +49,6 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
           boxSizing: "border-box",
-          paddingTop: "70px",
         },
       }}
     >
@@ -59,6 +58,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
           flexDirection: "column",
           height: "100%",
           overflow: "hidden",
+          pt: { xs: 6, sm: 7 },
         }}
       >
         <List>
