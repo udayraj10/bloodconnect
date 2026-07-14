@@ -2,7 +2,7 @@ import Box from "@mui/material/Box"
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
 import { useState } from "react"
-import { Typography } from "@mui/material"
+import { Stack, Typography } from "@mui/material"
 import { Outlet } from "react-router-dom"
 
 const AppLayout = () => {
@@ -13,13 +13,15 @@ const AppLayout = () => {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Stack>
       <Navbar isMobileOpen={isMobileOpen} onMenuClick={handleDrawerToggle} />
-      <Sidebar isMobileOpen={isMobileOpen} onToggle={handleDrawerToggle} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: { xs: 8, sm: 7 } }}>
-        <Outlet />
-      </Box>
-    </Box>
+      <Stack direction="row">
+        <Sidebar isMobileOpen={isMobileOpen} onToggle={handleDrawerToggle} />
+        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: { xs: 8, sm: 7 } }}>
+          <Outlet />
+        </Box>
+      </Stack>
+    </Stack>
   )
 }
 
