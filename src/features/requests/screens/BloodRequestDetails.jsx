@@ -97,7 +97,7 @@ const BloodRequestDetails = () => {
       spacing={3}
       sx={{
         mt: {
-          xs: 2,
+          xs: 0.5,
           sm: 1,
         },
       }}

@@ -5,7 +5,7 @@ import OffersTable from "../components/OffersTable"
 
 const OfferScreen = () => {
   return (
-    <Stack spacing={2} sx={{ mt: { xs: 2, sm: 1 } }}>
+    <Stack spacing={2} sx={{ mt: 1 }}>
       <AlertInfo />
 
       <Divider />

@@ -11,7 +11,7 @@ const ProfileScreen = () => {
   const { user } = useAuth()
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column", mt: { xs: 2, sm: 1 } }}
+      sx={{ display: "flex", flexDirection: "column", mt: { xs: 0.5, sm: 1 } }}
     >
       <Box sx={{ mb: 4 }}>
         <ProfileCard user={user} />

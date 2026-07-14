@@ -97,7 +97,7 @@ const OfferDetailsCard = () => {
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        mt: { xs: 1, md: 2 },
+        mt: { xs: 0.5, md: 1 },
         px: { xs: 1, sm: 2 },
       }}
     >

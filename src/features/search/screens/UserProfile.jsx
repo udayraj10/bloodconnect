@@ -70,7 +70,7 @@ const UserProfile = () => {
   }
 
   return (
-    <Box sx={{ mt: { xs: 2, md: 1 } }}>
+    <Box sx={{ mt: { xs: 0.5, md: 1 } }}>
       <ProfileCard user={user} />
 
       <SnackBar
