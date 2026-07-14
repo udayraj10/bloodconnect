@@ -138,6 +138,29 @@ const StatsScreen = () => {
     )
   }
 
+  if (stats === null || stats === undefined) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography
+          variant="body1"
+          component="h1"
+          color="error"
+          sx={{ textAlign: "center" }}
+        >
+          Something went wrong
+        </Typography>
+        <Typography
+          variant="body2"
+          component="h1"
+          color="error"
+          sx={{ textAlign: "center" }}
+        >
+          Please check your internet connection
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <Box sx={{ mt: { xs: 2, sm: 1 } }}>
       <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
@@ -156,8 +179,12 @@ const StatsScreen = () => {
 
       <Divider sx={{ my: 2 }} />
 
+      <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
+        Overview
+      </Typography>
+
       <Stack spacing={2} direction="row">
-        <Piechart data={overview} title="Donations & Requests Overview" />
+        <Piechart data={overview} title="Donations & Requests" />
         <Piechart
           data={requestDistribution}
           title="Request Status Distribution"
