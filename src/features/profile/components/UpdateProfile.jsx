@@ -15,6 +15,7 @@ import { useAuth } from "../../../context/AuthContext"
 import { bloodGroupOptions } from "../../../utils/options"
 import { updateProfile, deactivate } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 
 const defaultValues = {
   fullName: "",
@@ -276,6 +277,7 @@ const UpdateProfile = ({ onEditClick }) => {
             type="button"
             onClick={onDelete}
             variant="outlined"
+            startIcon={<DeleteOutlinedIcon />}
             sx={{
               borderWidth: 2,
               width: "fit-content",
