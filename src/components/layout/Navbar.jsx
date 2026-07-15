@@ -7,7 +7,7 @@ import {
   Avatar,
 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import MenuIcon from "@mui/icons-material/Menu"
+import { TbMenu } from "react-icons/tb"
 import WaterDropIcon from "@mui/icons-material/WaterDrop"
 import PersonIcon from "@mui/icons-material/Person"
 import ClearIcon from "@mui/icons-material/Clear"
@@ -108,7 +108,7 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
               },
             }}
           >
-            {isMobileOpen ? <ClearIcon /> : <MenuIcon />}
+            {isMobileOpen ? <ClearIcon /> : <TbMenu />}
           </IconButton>
 
           {/* User */}
