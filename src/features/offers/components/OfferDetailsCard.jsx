@@ -98,6 +98,7 @@ const OfferDetailsCard = () => {
         display: "flex",
         justifyContent: "center",
         mt: { xs: 0.5, md: 1 },
+        mb: 4,
         px: { xs: 1, sm: 2 },
       }}
     >

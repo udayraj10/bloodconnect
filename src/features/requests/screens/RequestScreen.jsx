@@ -53,7 +53,7 @@ const RequestScreen = () => {
   }, [loadRequests])
 
   return (
-    <Box sx={{ mt: { xs: 0.5, sm: 1 } }}>
+    <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
       <RequestForm loadRequests={loadRequests} />
 
       <Divider sx={{ my: 2 }} />

@@ -100,6 +100,7 @@ const BloodRequestDetails = () => {
           xs: 0.5,
           sm: 1,
         },
+        mb: 4,
       }}
     >
       <Grid

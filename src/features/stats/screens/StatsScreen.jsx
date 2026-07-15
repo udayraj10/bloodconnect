@@ -162,7 +162,7 @@ const StatsScreen = () => {
   }
 
   return (
-    <Box sx={{ mt: { xs: 0.5, sm: 1 } }}>
+    <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
       <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
         My Donations
       </Typography>
