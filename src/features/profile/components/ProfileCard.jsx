@@ -7,10 +7,12 @@ import CardHeader from "@mui/material/CardHeader"
 import Stack from "@mui/material/Stack"
 import Chip from "@mui/material/Chip"
 import Typography from "@mui/material/Typography"
-import { formatDate } from "../../utils/formatDate"
+import { useAuth } from "../../../context/AuthContext"
+import { formatDate } from "../../../utils/formatDate"
 
-const ProfileCard = ({ user }) => {
-  const isAvailable = user?.isAvailable || false
+const ProfileCard = () => {
+  const { user } = useAuth()
+  const { isAvailable } = user
 
   const displayData = [
     { label: "Age", value: user?.age || "-" },

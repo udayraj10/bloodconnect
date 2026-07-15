@@ -1,1 +1,7 @@
-export { RequestScreen as RequestPage } from "../features/requests"
+import React from "react"
+
+const RequestPage = () => {
+  return <div>RequestPage</div>
+}
+
+export default RequestPage

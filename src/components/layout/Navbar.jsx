@@ -6,7 +6,6 @@ import {
   IconButton,
   Avatar,
 } from "@mui/material"
-import { useNavigate } from "react-router-dom"
 import MenuIcon from "@mui/icons-material/Menu"
 import WaterDropIcon from "@mui/icons-material/WaterDrop"
 import PersonIcon from "@mui/icons-material/Person"
@@ -15,7 +14,6 @@ import { useAuth } from "../../context/AuthContext"
 
 export default function Navbar({ isMobileOpen, onMenuClick }) {
   const { user } = useAuth()
-  const navigate = useNavigate()
 
   return (
     <AppBar
@@ -31,23 +29,15 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
         sx={{
           justifyContent: "space-between",
           py: 0.5,
-          maxHeight: {
-            xs: 65,
-            md: 70,
-          },
+          minHeight: 75,
         }}
       >
         {/* Logo */}
         <Box
-          component="button"
-          onClick={() => navigate("/")}
           sx={{
-            background: "none",
             display: "flex",
             alignItems: "center",
-            gap: 0.5,
-            cursor: "pointer",
-            border: "none",
+            gap: 1.5,
           }}
         >
           <WaterDropIcon
@@ -78,12 +68,7 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
 
             <Typography
               variant="caption"
-              sx={{
-                display: "block",
-                color: "text.secondary",
-                lineHeight: 0.5,
-                mb: 1,
-              }}
+              sx={{ display: "block", color: "text.secondary", lineHeight: 1 }}
             >
               Save Lives. Donate Blood.
             </Typography>
@@ -146,12 +131,12 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
                 variant="caption"
                 sx={{
                   display: "block",
-                  color: user?.isAvailable ? "success.main" : "error.main",
+                  color: "text.secondary",
                   lineHeight: 1,
-                  fontWeight: 400,
+                  fontWeight: 300,
                 }}
               >
-                {user?.isAvailable ? "Available" : "Not Available"}
+                {user?.role || "Role"}
               </Typography>
             </Box>
           </Box>
