@@ -1,7 +1,1 @@
-import React from "react"
-
-const RequestPage = () => {
-  return <div>RequestPage</div>
-}
-
-export default RequestPage
+export { RequestScreen as RequestPage } from "../features/requests"

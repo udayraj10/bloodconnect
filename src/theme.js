@@ -178,13 +178,17 @@ export const theme = createTheme({
           },
 
           "& .MuiDataGrid-cell": {
-            borderColor: "rgba(0, 0, 0, 0.2)",
+            borderColor: "#cbd5e1",
           },
           "& .MuiDataGrid-columnHeader": {
-            borderColor: "rgba(0, 0, 0, 0.2)",
+            backgroundColor: "#f0f0f0",
+            borderColor: "#cbd5e1",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "600",
           },
           "& .MuiDataGrid-withBorderColor": {
-            borderColor: "rgba(0, 0, 0, 0.2) !important",
+            borderColor: "#cbd5e1 !important",
           },
         },
       },

@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography"
 import FormTextField from "../../../components/ui/FormTextField"
 import { changePassword } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 
 const defaultValues = {
   newPassword: "",
@@ -112,13 +113,13 @@ const ChangePassword = () => {
           />
         </Box>
       </CardContent>
-      <CardActions sx={{ px: 2, pb: 2 }}>
+      <CardActions sx={{ px: 2, pb: 2, justifyContent: "flex-end" }}>
         <Button
           type="submit"
           variant="contained"
+          startIcon={<LockOutlinedIcon />}
           loading={loading}
           loadingPosition="start"
-          fullWidth
         >
           Update Password
         </Button>

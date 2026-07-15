@@ -25,8 +25,8 @@ const menuItems = [
   { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
-  { text: "Donations", icon: <WaterDropIcon />, path: "/donations" },
-  { text: "Stats", icon: <BarChartIcon />, path: "/stats" },
+  { text: "Search", icon: <WaterDropIcon />, path: "/search" },
+  { text: "My Stats", icon: <BarChartIcon />, path: "/stats" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
@@ -49,7 +49,6 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
           boxSizing: "border-box",
-          paddingTop: "70px",
         },
       }}
     >
@@ -59,44 +58,56 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
           flexDirection: "column",
           height: "100%",
           overflow: "hidden",
+          pt: { xs: 6, sm: 7 },
         }}
       >
         <List>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                component={Link}
-                to={item.path}
-                selected={currentPath === item.path}
-                sx={{
-                  color: "text.primary",
+          {menuItems.map((item) => {
+            const isSelected =
+              item.path === "/"
+                ? currentPath === "/"
+                : currentPath.startsWith(item.path)
 
-                  "&:hover": {
-                    bgcolor: "primary.light",
-                  },
-
-                  "&.Mui-selected": {
-                    bgcolor: "primary.light",
-                    color: "primary.main",
-                  },
-                }}
+            return (
+              <ListItem
+                key={item.text}
+                disablePadding
+                sx={{ display: "block" }}
               >
-                <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontWeight: currentPath === item.path ? 500 : 300,
-                      },
+                <ListItemButton
+                  component={Link}
+                  to={item.path}
+                  selected={isSelected}
+                  sx={{
+                    color: "text.primary",
+
+                    "&:hover": {
+                      bgcolor: "primary.light",
+                    },
+
+                    "&.Mui-selected": {
+                      bgcolor: "primary.light",
+                      color: "primary.main",
                     },
                   }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                >
+                  <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    slotProps={{
+                      primary: {
+                        sx: {
+                          fontWeight: isSelected ? 500 : 300,
+                        },
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            )
+          })}
         </List>
 
         <Box
