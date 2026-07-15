@@ -15,6 +15,7 @@ import { useAuth } from "../../../context/AuthContext"
 import { bloodGroupOptions } from "../../../utils/options"
 import { updateProfile, deactivate } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 
 const defaultValues = {
   fullName: "",
@@ -40,15 +41,15 @@ const UpdateProfile = ({ onEditClick }) => {
   })
 
   const resetValues = {
-    fullName: user.fullName ?? "",
-    email: user.email ?? "",
-    age: user.age ?? "",
-    phone: user.phone ?? "",
-    bloodGroup: user.bloodGroup ?? "",
-    city: user.city ?? "",
-    address: user.address ?? "",
-    isAvailable: user.isAvailable ?? false,
-    lastDonationDate: user.lastDonationDate ?? "",
+    fullName: user?.fullName ?? "",
+    email: user?.email ?? "",
+    age: user?.age ?? "",
+    phone: user?.phone ?? "",
+    bloodGroup: user?.bloodGroup ?? "",
+    city: user?.city ?? "",
+    address: user?.address ?? "",
+    isAvailable: user?.isAvailable ?? false,
+    lastDonationDate: user?.lastDonationDate ?? "",
   }
 
   const onCancel = () => {
@@ -276,6 +277,7 @@ const UpdateProfile = ({ onEditClick }) => {
             type="button"
             onClick={onDelete}
             variant="outlined"
+            startIcon={<DeleteOutlinedIcon />}
             sx={{
               borderWidth: 2,
               width: "fit-content",
