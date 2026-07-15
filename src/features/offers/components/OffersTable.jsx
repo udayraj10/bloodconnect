@@ -251,7 +251,7 @@ const OffersTable = () => {
         Received Offers
       </Typography>
 
-      <Table columns={columns} requests={offers} loading={loading} />
+      <Table columns={columns} rows={offers} loading={loading} />
 
       <SnackBar
         open={isOpen}

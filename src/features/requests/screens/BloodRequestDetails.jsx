@@ -136,7 +136,7 @@ const BloodRequestDetails = () => {
           Matched Donors
         </Typography>
 
-        <Table columns={columns} requests={donors} loading={loading} />
+        <Table columns={columns} rows={donors} loading={loading} />
       </TableBox>
 
       <SnackBar

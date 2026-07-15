@@ -1,10 +1,10 @@
 import { DataGrid } from "@mui/x-data-grid"
 
-const Table = ({ columns, requests, loading }) => {
+const Table = ({ columns, rows, loading }) => {
   return (
     <DataGrid
       columns={columns}
-      rows={requests}
+      rows={rows}
       loading={loading}
       disableColumnMenu
       rowSelection={false}

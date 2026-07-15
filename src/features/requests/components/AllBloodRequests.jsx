@@ -128,7 +128,7 @@ const AllBloodRequests = ({ requests, loadRequests, loading }) => {
         </Typography>
       </Box>
 
-      <Table columns={columns} requests={requests} loading={loading} />
+      <Table columns={columns} rows={requests} loading={loading} />
     </TableBox>
   )
 }
