@@ -146,12 +146,12 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
                 variant="caption"
                 sx={{
                   display: "block",
-                  color: "text.secondary",
+                  color: user?.isAvailable ? "success.main" : "error.main",
                   lineHeight: 1,
-                  fontWeight: 300,
+                  fontWeight: 400,
                 }}
               >
-                {user?.role || "Role"}
+                {user?.isAvailable ? "Available" : "Not Available"}
               </Typography>
             </Box>
           </Box>
