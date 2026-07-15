@@ -1,1 +1,7 @@
-export { OfferScreen as OfferPage } from "../features/offers"
+import React from "react"
+
+const OfferPage = () => {
+  return <div>OfferPage</div>
+}
+
+export default OfferPage

@@ -1,21 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom"
-import { Box, CircularProgress } from "@mui/material"
 import { useAuth } from "../../context/AuthContext"
 
 const ProtectedRoute = () => {
-  const { loading, isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
 
   if (loading) {
-    return (
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <CircularProgress />
-      </Box>
-    )
+    return null
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/auth" replace />
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />
+  }
+
+  return <Outlet />
 }
 
 export default ProtectedRoute
