@@ -8,6 +8,8 @@ import TableBox from "../../../components/ui/TableBox"
 import Table from "../../../components/ui/Table"
 import SnackBar from "../../../components/ui/SnackBar"
 import Chip from "../../../components/ui/Chip"
+import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import { formatDate } from "../../../utils/formatDate"
 import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
 
@@ -261,6 +263,14 @@ const OffersTable = () => {
     ],
     [onAccept, onDecline, onView],
   )
+
+  if (loading) {
+    return <Progress />
+  }
+
+  if (offers.length === 0 || offers === undefined) {
+    return <FailureFallback />
+  }
 
   return (
     <TableBox>

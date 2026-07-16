@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { getStats } from "../api/stats.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import FallbackFailure from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import Box from "@mui/material/Box"
 import CircularProgress from "@mui/material/CircularProgress"
 import StatsItem from "../components/StatsItem"
@@ -124,41 +126,11 @@ const StatsScreen = () => {
   ]
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    )
+    return <Progress />
   }
 
   if (stats === null || stats === undefined) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography
-          variant="body1"
-          component="h1"
-          color="error"
-          sx={{ textAlign: "center" }}
-        >
-          Something went wrong
-        </Typography>
-        <Typography
-          variant="body2"
-          component="h1"
-          color="error"
-          sx={{ textAlign: "center" }}
-        >
-          Please check your internet connection
-        </Typography>
-      </Box>
-    )
+    return <FallbackFailure />
   }
 
   return (

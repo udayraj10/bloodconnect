@@ -5,6 +5,8 @@ import { getBloodRequests } from "../api/request.api"
 import AllBloodRequests from "../components/AllBloodRequests"
 import { Container, Divider, Typography } from "@mui/material"
 import SnackBar from "../../../components/ui/SnackBar"
+import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 
 const RequestScreen = () => {
   const [requests, setRequests] = useState([])
@@ -51,6 +53,14 @@ const RequestScreen = () => {
 
     return () => controller.abort()
   }, [loadRequests])
+
+  if (loading) {
+    return <Progress />
+  }
+
+  if (requests.length === 0 || requests === undefined) {
+    return <FailureFallback />
+  }
 
   return (
     <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>

@@ -8,6 +8,8 @@ import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
 import SnackBar from "../../../components/ui/SnackBar"
 import Chip from "../../../components/ui/Chip"
+import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { formatDate } from "../../../utils/formatDate"
 import {
@@ -117,18 +119,14 @@ const BloodRequestDetails = () => {
   ]
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    )
+    return <Progress />
+  }
+
+  if (
+    (donors.length === 0 && request === null) ||
+    (donors === undefined && request === undefined)
+  ) {
+    return <FailureFallback />
   }
 
   return (

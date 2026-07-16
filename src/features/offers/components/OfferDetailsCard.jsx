@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography"
 import { completeOffer, getOffer } from "../api/offers.api"
 import SnackBar from "../../../components/ui/SnackBar"
 import Chip from "../../../components/ui/Chip"
+import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import Divider from "@mui/material/Divider"
 import { formatDate } from "../../../utils/formatDate"
 import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
@@ -103,6 +105,14 @@ const OfferDetailsCard = () => {
 
   const isCompleted = (offer?.status ?? "").toUpperCase() === "COMPLETED"
 
+  if (loading) {
+    return <Progress />
+  }
+
+  if (offer === null || offer === undefined) {
+    return <FailureFallback />
+  }
+
   return (
     <Box
       sx={{
@@ -136,71 +146,59 @@ const OfferDetailsCard = () => {
 
           <Divider />
 
-          {loading ? (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-              <CircularProgress size={28} />
-            </Box>
-          ) : (
-            <>
-              <Typography variant="h6" sx={{ px: 3, py: 2 }}>
-                {offer?.message || "No message available"}
-              </Typography>
+          <Typography variant="h6" sx={{ px: 3, py: 2 }}>
+            {offer?.message || "No message available"}
+          </Typography>
 
-              <Grid
-                container
-                spacing={{ xs: 2, sm: 2.5 }}
-                sx={{ px: 3, pb: 3 }}
-              >
-                {detailItems.map((item) => (
-                  <Grid item size={{ xs: 12, sm: 6 }} key={item.label}>
-                    <Box
-                      sx={{
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 1,
-                        px: 2,
-                        py: 1.25,
-                        bgcolor: "background.paper",
-                        gap: 1,
-                      }}
-                    >
-                      <Typography variant="caption" color="text.secondary">
-                        {item.label}
-                      </Typography>
-                      {item.component === "chip" ? (
-                        <Box>
-                          <Chip variant={item.variant}>{item.value}</Chip>
-                        </Box>
-                      ) : (
-                        <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                          {item.value}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
-
-              {!isCompleted && (
+          <Grid container spacing={{ xs: 2, sm: 2.5 }} sx={{ px: 3, pb: 3 }}>
+            {detailItems.map((item) => (
+              <Grid item size={{ xs: 12, sm: 6 }} key={item.label}>
                 <Box
                   sx={{
-                    display: "flex",
-                    justifyContent: { xs: "stretch", sm: "flex-end" },
-                    p: 3,
-                    pt: 0,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 1,
+                    px: 2,
+                    py: 1.25,
+                    bgcolor: "background.paper",
+                    gap: 1,
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={handleCompleteOffer}
-                    sx={{ width: { xs: "100%", sm: "auto" } }}
-                  >
-                    Complete offer
-                  </Button>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.label}
+                  </Typography>
+                  {item.component === "chip" ? (
+                    <Box>
+                      <Chip variant={item.variant}>{item.value}</Chip>
+                    </Box>
+                  ) : (
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                      {item.value}
+                    </Typography>
+                  )}
                 </Box>
-              )}
-            </>
+              </Grid>
+            ))}
+          </Grid>
+
+          {!isCompleted && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "stretch", sm: "flex-end" },
+                p: 3,
+                pt: 0,
+              }}
+            >
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleCompleteOffer}
+                sx={{ width: { xs: "100%", sm: "auto" } }}
+              >
+                Complete offer
+              </Button>
+            </Box>
           )}
         </Box>
       </Box>

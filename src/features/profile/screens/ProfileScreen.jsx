@@ -2,12 +2,18 @@ import Box from "@mui/material/Box"
 import UpdateProfile from "../components/UpdateProfile"
 import { Typography } from "@mui/material"
 import ProfileCard from "../../../components/ui/ProfileCard"
+import FailureFallback from "../../../components/ui/FailureFallback"
 import Divider from "@mui/material/Divider"
 import ChangePassword from "../components/ChangePassword"
 import { useAuth } from "../../../context/AuthContext"
 
 const ProfileScreen = () => {
   const { user } = useAuth()
+
+  if (user === null || user === undefined) {
+    return <FailureFallback />
+  }
+
   return (
     <Box
       sx={{
