@@ -42,6 +42,10 @@ const ActionCell = ({
     onView(detailId)
   }
 
+  if (status === "closed") {
+    return null
+  }
+
   if (status === "declined") {
     return (
       <Button variant="outlined" color="error" size="small" disabled>
