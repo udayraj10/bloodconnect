@@ -47,6 +47,7 @@ const ActionCell = ({ rowId, status, onCancel, onView }) => {
   }
 
   const isCancelled = status?.toLowerCase() === "cancelled"
+  const isFulfilled = status?.toLowerCase() === "fulfilled"
 
   return (
     <Stack
@@ -59,6 +60,7 @@ const ActionCell = ({ rowId, status, onCancel, onView }) => {
         disabled={isCancelled}
         size="small"
         onClick={handleCancelClick}
+        sx={{ display: isFulfilled ? "none" : "block" }}
       >
         {isCancelled ? "Cancelled" : "Cancel"}
       </Button>
