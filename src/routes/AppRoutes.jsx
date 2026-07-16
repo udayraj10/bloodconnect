@@ -1,6 +1,5 @@
-import { useEffect } from "react" 
+import { useEffect } from "react"
 import { Routes, Route, useLocation, matchPath } from "react-router-dom"
-import HomePage from "../pages/HomePage"
 import { AuthPage } from "../pages/AuthPage"
 import { OfferPage } from "../pages/OfferPage"
 import { OfferDetailsPage } from "../pages/OfferDetailsPage"
@@ -53,7 +52,7 @@ const AppRoutes = () => {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<AppLayout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<StatsPage />} />
             <Route path="/requests" element={<RequestPage />} />
             <Route path="/requests/:id" element={<BloodRequestDetails />} />
             <Route path="/offers" element={<OfferPage />} />
@@ -61,7 +60,6 @@ const AppRoutes = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/search/:id" element={<UserProfilePage />} />
-            <Route path="/stats" element={<StatsPage />} />
           </Route>
         </Route>
       </Routes>
