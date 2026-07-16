@@ -7,8 +7,10 @@ import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import { completeOffer, getOffer } from "../api/offers.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import Chip from "../../../components/ui/Chip"
 import Divider from "@mui/material/Divider"
 import { formatDate } from "../../../utils/formatDate"
+import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
 
 const OfferDetailsCard = () => {
   const { id } = useParams()
@@ -82,11 +84,21 @@ const OfferDetailsCard = () => {
     { label: "Blood group", value: offer?.bloodGroup || "—" },
     { label: "City", value: offer?.city || "—" },
     { label: "Offer ID", value: offer?.id || "—" },
-    { label: "Urgency", value: offer?.urgencyLevel || "—" },
+    {
+      label: "Urgency",
+      value: offer?.urgencyLevel || "—",
+      component: "chip",
+      variant: urgencyVariant(offer?.urgencyLevel || "-"),
+    },
     { label: "Requested by", value: offer?.requestedBy || "—" },
     { label: "Offered at", value: formatDate(offer?.offeredAt) },
     { label: "Responded at", value: formatDate(offer?.respondedAt) },
-    { label: "Status", value: offer?.status || "—" },
+    {
+      label: "Status",
+      value: offer?.status || "—",
+      component: "chip",
+      variant: offerStatusVariant(offer?.status || "-"),
+    },
   ]
 
   const isCompleted = (offer?.status ?? "").toUpperCase() === "COMPLETED"
@@ -149,14 +161,21 @@ const OfferDetailsCard = () => {
                         px: 2,
                         py: 1.25,
                         bgcolor: "background.paper",
+                        gap: 1,
                       }}
                     >
                       <Typography variant="caption" color="text.secondary">
                         {item.label}
                       </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                        {item.value}
-                      </Typography>
+                      {item.component === "chip" ? (
+                        <Box>
+                          <Chip variant={item.variant}>{item.value}</Chip>
+                        </Box>
+                      ) : (
+                        <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                          {item.value}
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
                 ))}

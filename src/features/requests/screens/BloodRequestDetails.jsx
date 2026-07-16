@@ -3,18 +3,32 @@ import { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 import Grid from "@mui/material/Grid"
-import { Typography, CircularProgress, Alert, Chip } from "@mui/material" // Added CircularProgress
+import { Typography, CircularProgress, Alert } from "@mui/material"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
 import SnackBar from "../../../components/ui/SnackBar"
+import Chip from "../../../components/ui/Chip"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { formatDate } from "../../../utils/formatDate"
+import {
+  urgencyVariant,
+  requestStatusVariant,
+  offerStatusVariant,
+} from "../../../utils/chipUtils"
 
 const columns = [
   { field: "fullName", headerName: "Full Name", flex: 1, minWidth: 150 },
   { field: "city", headerName: "City", flex: 1, minWidth: 120 },
   { field: "bloodGroup", headerName: "Blood Group", minWidth: 130, flex: 1 },
-  { field: "offerStatus", headerName: "Offer Status", minWidth: 130, flex: 1 },
+  {
+    field: "offerStatus",
+    headerName: "Offer Status",
+    minWidth: 130,
+    flex: 1,
+    renderCell: (params) => (
+      <Chip variant={offerStatusVariant(params.value)}>{params.value}</Chip>
+    ),
+  },
   {
     field: "offeredAt",
     headerName: "Offered At",
@@ -86,8 +100,18 @@ const BloodRequestDetails = () => {
     { label: "Request ID", value: request?.id || "-" },
     { label: "Blood Group", value: request?.bloodGroup || "-" },
     { label: "City", value: request?.city || "-" },
-    { label: "Urgency", value: request?.urgencyLevel || "-" },
-    { label: "Status", value: request?.status || "-" },
+    {
+      label: "Urgency",
+      value: request?.urgencyLevel || "-",
+      component: "chip",
+      variant: urgencyVariant(request?.urgencyLevel || "-"),
+    },
+    {
+      label: "Request Status",
+      value: request?.status || "-",
+      component: "chip",
+      variant: requestStatusVariant(request?.status || "-"),
+    },
     { label: "Message", value: request?.message || "-" },
     { label: "Requested on", value: formatDate(request?.createdAt || "-") },
   ]
@@ -126,7 +150,13 @@ const BloodRequestDetails = () => {
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {item.label}
               </Typography>
-              <Typography variant="body1">{item.value}</Typography>
+              {item.component === "chip" ? (
+                <Box>
+                  <Chip variant={item.variant}>{item.value}</Chip>
+                </Box>
+              ) : (
+                <Typography variant="body1">{item.value}</Typography>
+              )}
             </Box>
           </Grid>
         ))}

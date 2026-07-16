@@ -5,9 +5,10 @@ import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
 import Stack from "@mui/material/Stack"
-import Chip from "@mui/material/Chip"
+import Chip from "./Chip"
 import Typography from "@mui/material/Typography"
 import { formatDate } from "../../utils/formatDate"
+import { accountVariant } from "../../utils/chipUtils"
 
 const ProfileCard = ({ user }) => {
   const isAvailable = user?.isAvailable || false
@@ -17,7 +18,12 @@ const ProfileCard = ({ user }) => {
     { label: "Phone", value: user?.phone || "-" },
     { label: "Blood Group", value: user?.bloodGroup || "-" },
     { label: "City", value: user?.city || "-" },
-    { label: "Account Type", value: user?.accountType || "-" },
+    {
+      label: "Account Type",
+      value: user?.accountType || "-",
+      component: "chip",
+      variant: accountVariant(user?.accountType || "-"),
+    },
     { label: "Member since", value: formatDate(user?.createdAt || "-") },
   ]
 
@@ -37,11 +43,11 @@ const ProfileCard = ({ user }) => {
           backgroundColor: "transparent",
         }}
         action={
-          <Chip
-            label={isAvailable ? "Available" : "Not Available"}
-            color={isAvailable ? "success" : "error"}
-            sx={{ m: 1 }}
-          />
+          <Box sx={{ m: 1 }}>
+            <Chip variant={isAvailable ? "success" : "error"}>
+              {isAvailable ? "Available" : "Not Available"}
+            </Chip>
+          </Box>
         }
       />
 
@@ -75,9 +81,15 @@ const ProfileCard = ({ user }) => {
               >
                 {item.label}
               </Typography>
-              <Typography variant="body1" sx={{ mt: 0.5 }}>
-                {item.value}
-              </Typography>
+              {item.component === "chip" ? (
+                <Box>
+                  <Chip variant={item.variant}>{item.value}</Chip>
+                </Box>
+              ) : (
+                <Typography variant="body1" sx={{ mt: 0.5 }}>
+                  {item.value}
+                </Typography>
+              )}
             </Box>
           ))}
         </Box>

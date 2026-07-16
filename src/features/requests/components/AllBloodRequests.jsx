@@ -9,6 +9,8 @@ import { Stack } from "@mui/material"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
 import Box from "@mui/material/Box"
+import Chip from "../../../components/ui/Chip"
+import { urgencyVariant, requestStatusVariant } from "../../../utils/chipUtils"
 
 const STATIC_COLUMNS = [
   { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 110 },
@@ -18,8 +20,19 @@ const STATIC_COLUMNS = [
     headerName: "Urgency Level",
     flex: 1.2,
     minWidth: 130,
+    renderCell: (params) => (
+      <Chip variant={urgencyVariant(params.value)}>{params.value}</Chip>
+    ),
   },
-  { field: "status", headerName: "Status", flex: 1, minWidth: 100 },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 100,
+    renderCell: (params) => (
+      <Chip variant={requestStatusVariant(params.value)}>{params.value}</Chip>
+    ),
+  },
 ]
 
 const ActionCell = ({ rowId, status, onCancel, onView }) => {

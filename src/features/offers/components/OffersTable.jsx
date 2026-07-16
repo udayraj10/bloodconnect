@@ -7,7 +7,9 @@ import { getOffers, acceptOffer, declineOffer } from "../api/offers.api"
 import TableBox from "../../../components/ui/TableBox"
 import Table from "../../../components/ui/Table"
 import SnackBar from "../../../components/ui/SnackBar"
+import Chip from "../../../components/ui/Chip"
 import { formatDate } from "../../../utils/formatDate"
+import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
 
 const ActionCell = ({
   row,
@@ -210,12 +212,23 @@ const OffersTable = () => {
         minWidth: 150,
         flex: 1,
       },
-      { field: "urgencyLevel", headerName: "Urgency", minWidth: 130, flex: 1 },
+      {
+        field: "urgencyLevel",
+        headerName: "Urgency",
+        minWidth: 130,
+        flex: 1,
+        renderCell: (params) => (
+          <Chip variant={urgencyVariant(params.value)}>{params.value}</Chip>
+        ),
+      },
       {
         field: "status",
         headerName: "Status",
         minWidth: 120,
         flex: 1,
+        renderCell: (params) => (
+          <Chip variant={offerStatusVariant(params.value)}>{params.value}</Chip>
+        ),
       },
       {
         field: "offeredAt",
