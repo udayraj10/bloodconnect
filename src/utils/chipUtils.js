@@ -36,6 +36,8 @@ export const offerStatusVariant = (type) => {
       return "success"
     case "cancelled":
       return "error"
+    case "closed":
+      return "muted"
     default:
       return "info"
   }

@@ -14,6 +14,7 @@ import RedeemIcon from "@mui/icons-material/Redeem"
 import WaterDropIcon from "@mui/icons-material/WaterDrop"
 import BarChartIcon from "@mui/icons-material/BarChart"
 import ListItemIcon from "@mui/material/ListItemIcon"
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import { useTheme } from "@mui/material/styles"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { useAuth } from "../../context/AuthContext"
@@ -120,6 +121,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
             <Button
               onClick={logout}
               variant="outlined"
+              startIcon={<LogoutOutlinedIcon />}
               fullWidth
               sx={{ borderWidth: 2 }}
             >

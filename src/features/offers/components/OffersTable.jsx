@@ -123,7 +123,7 @@ const OffersTable = () => {
         return
       }
 
-      console.error("offers loading error", error)
+      console.error("offers table error", error)
       const errorMessage =
         error.response?.data?.message || "Failed to load details"
 

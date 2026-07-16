@@ -47,6 +47,12 @@ const ChipRoot = styled("span")(({ theme, variant, size }) => ({
     borderColor: "#B2EBF2",
     color: "#007A87",
   }),
+
+  ...(variant === "muted" && {
+    backgroundColor: "#ececec",
+    borderColor: "#d3d3d3",
+    color: "#616161",
+  }),
 }))
 
 const Chip = ({ children, variant = "error" }) => {

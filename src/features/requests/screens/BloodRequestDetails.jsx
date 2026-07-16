@@ -116,6 +116,21 @@ const BloodRequestDetails = () => {
     { label: "Requested on", value: formatDate(request?.createdAt || "-") },
   ]
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
+  }
+
   return (
     <Stack
       spacing={3}
