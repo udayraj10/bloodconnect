@@ -43,7 +43,7 @@ const ProfileCard = ({ user }) => {
           backgroundColor: "transparent",
         }}
         action={
-          <Box sx={{ m: 1 }}>
+          <Box sx={{ m: 1.2 }}>
             <Chip variant={isAvailable ? "success" : "error"}>
               {isAvailable ? "Available" : "Not Available"}
             </Chip>
