@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
 import { Typography } from "@mui/material"
+import Tooltip from "../../../components/ui/Tooltip"
 import { getOffers, acceptOffer, declineOffer } from "../api/offers.api"
 import TableBox from "../../../components/ui/TableBox"
 import Table from "../../../components/ui/Table"
@@ -233,7 +234,14 @@ const OffersTable = () => {
         minWidth: 120,
         flex: 1,
         renderCell: (params) => (
-          <Chip variant={offerStatusVariant(params.value)}>{params.value}</Chip>
+          <Tooltip
+            title="Another donor fulfilled this request"
+            disable={params.value?.toLowerCase() !== "closed"}
+          >
+            <Chip variant={offerStatusVariant(params.value)}>
+              {params.value}
+            </Chip>
+          </Tooltip>
         ),
       },
       {
