@@ -22,11 +22,11 @@ import { useAuth } from "../../context/AuthContext"
 const drawerWidth = 240
 
 const menuItems = [
+  { text: "Dashboard", icon: <BarChartIcon />, path: "/" },
   { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
   { text: "Search", icon: <WaterDropIcon />, path: "/search" },
-  { text: "My Stats", icon: <BarChartIcon />, path: "/" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
