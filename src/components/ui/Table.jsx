@@ -17,7 +17,7 @@ const Table = ({ columns, rows, loading }) => {
       sx={{
         border: 1,
         borderColor: "divider",
-        m: 2,
+
         "& .MuiDataGrid-cell": {
           px: 2,
         },

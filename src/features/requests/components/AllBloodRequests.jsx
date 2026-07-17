@@ -13,11 +13,11 @@ import Chip from "../../../components/ui/Chip"
 import { urgencyVariant, requestStatusVariant } from "../../../utils/chipUtils"
 
 const STATIC_COLUMNS = [
-  { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 110 },
+  { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 130 },
   { field: "city", headerName: "City", flex: 1.2, minWidth: 120 },
   {
     field: "urgencyLevel",
-    headerName: "Urgency Level",
+    headerName: "Urgency",
     flex: 1.2,
     minWidth: 130,
     renderCell: (params) => (
@@ -133,7 +133,7 @@ const AllBloodRequests = ({ requests, loadRequests, loading }) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          m: 2,
+
           mb: 1,
         }}
       >

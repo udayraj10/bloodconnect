@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 import Stack from "@mui/material/Stack"
 import Grid from "@mui/material/Grid"
 import { Typography, CircularProgress, Alert } from "@mui/material"
-import Tooltip from "../../../components/ui/Tooltip"
+import CustomTooltip from "../../../components/ui/CustomTooltip"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
 import SnackBar from "../../../components/ui/SnackBar"
@@ -29,12 +29,12 @@ const columns = [
     minWidth: 130,
     flex: 1,
     renderCell: (params) => (
-      <Tooltip
+      <CustomTooltip
         title="Another donor fulfilled this request"
         disable={params.value?.toLowerCase() !== "closed"}
       >
         <Chip variant={offerStatusVariant(params.value)}>{params.value}</Chip>
-      </Tooltip>
+      </CustomTooltip>
     ),
   },
   {

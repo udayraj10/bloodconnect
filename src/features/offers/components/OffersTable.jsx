@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
 import { Typography } from "@mui/material"
-import Tooltip from "../../../components/ui/Tooltip"
+import CustomTooltip from "../../../components/ui/CustomTooltip"
 import { getOffers, acceptOffer, declineOffer } from "../api/offers.api"
 import TableBox from "../../../components/ui/TableBox"
 import Table from "../../../components/ui/Table"
@@ -210,7 +210,7 @@ const OffersTable = () => {
         field: "bloodGroup",
         headerName: "Blood Group",
         flex: 1,
-        minWidth: 150,
+        minWidth: 130,
       },
       { field: "city", headerName: "City", flex: 1, minWidth: 120 },
       {
@@ -234,14 +234,14 @@ const OffersTable = () => {
         minWidth: 120,
         flex: 1,
         renderCell: (params) => (
-          <Tooltip
+          <CustomTooltip
             title="Another donor fulfilled this request"
             disable={params.value?.toLowerCase() !== "closed"}
           >
             <Chip variant={offerStatusVariant(params.value)}>
               {params.value}
             </Chip>
-          </Tooltip>
+          </CustomTooltip>
         ),
       },
       {
@@ -282,7 +282,7 @@ const OffersTable = () => {
 
   return (
     <TableBox>
-      <Typography variant="h6" component="h2" sx={{ m: 2, mb: 1 }}>
+      <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
         Received Offers
       </Typography>
 
