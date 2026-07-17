@@ -11,7 +11,7 @@ import HomeIcon from "@mui/icons-material/Home"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism"
 import RedeemIcon from "@mui/icons-material/Redeem"
-import WaterDropIcon from "@mui/icons-material/WaterDrop"
+import ManageSearchIcon from "@mui/icons-material/ManageSearch"
 import BarChartIcon from "@mui/icons-material/BarChart"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
@@ -26,7 +26,7 @@ const menuItems = [
   { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
-  { text: "Search", icon: <WaterDropIcon />, path: "/search" },
+  { text: "Search", icon: <ManageSearchIcon />, path: "/search" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
