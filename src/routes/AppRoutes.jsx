@@ -14,7 +14,7 @@ import AppLayout from "../components/layout/AppLayout"
 import ProtectedRoute from "../components/layout/ProtectedRoute"
 
 const titleConfig = [
-  { path: "/", title: "Home" },
+  { path: "/", title: "Dashboard" },
   { path: "/auth", title: "Authentication" },
   { path: "/requests", title: "Requests" },
   { path: "/requests/:id", title: "Requests Details" },
