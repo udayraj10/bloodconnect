@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
@@ -13,142 +13,93 @@ import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import { formatDate } from "../../../utils/formatDate"
 import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
-
-const ActionCell = ({
-  row,
-  onAccept,
-  onDecline,
-  onView,
-  loadingRowId,
-  loadingActionType,
-}) => {
-  const rowId = row?.id ?? row?._id
-  const detailId = row?.requestId ?? row?.request?.id ?? rowId
-  const status = (row?.status ?? "").toLowerCase()
-  const isAcceptLoading =
-    loadingRowId === rowId && loadingActionType === "accept"
-  const isDeclineLoading =
-    loadingRowId === rowId && loadingActionType === "decline"
-
-  const handleAcceptClick = (event) => {
-    event.stopPropagation()
-    onAccept(rowId)
-  }
-
-  const handleDeclineClick = (event) => {
-    event.stopPropagation()
-    onDecline(rowId)
-  }
-
-  const handleViewClick = (event) => {
-    event.stopPropagation()
-    onView(detailId)
-  }
-
-  if (status === "closed") {
-    return null
-  }
-
-  if (status === "declined") {
-    return (
-      <Button variant="outlined" color="error" size="small" disabled>
-        Declined
-      </Button>
-    )
-  }
-
-  if (status === "accepted" || status === "completed") {
-    return (
-      <Button
-        variant="outlined"
-        color="info"
-        size="small"
-        onClick={handleViewClick}
-      >
-        View Details
-      </Button>
-    )
-  }
-
-  return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{ height: "100%", alignItems: "center" }}
-    >
-      <Button
-        variant="outlined"
-        color="success"
-        size="small"
-        onClick={handleAcceptClick}
-        loading={isAcceptLoading}
-        loadingPosition="start"
-      >
-        Accept
-      </Button>
-      <Button
-        variant="outlined"
-        color="error"
-        size="small"
-        onClick={handleDeclineClick}
-        loading={isDeclineLoading}
-        loadingPosition="start"
-      >
-        Decline
-      </Button>
-    </Stack>
-  )
-}
+import ActionCell from "./ActionCell"
 
 const OffersTable = () => {
   const navigate = useNavigate()
   const [offers, setOffers] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [backgroundLoading, setBackgroundLoading] = useState(false)
   const [loadingRowId, setLoadingRowId] = useState(null)
   const [loadingActionType, setLoadingActionType] = useState("")
+  const [error, setError] = useState("")
   const [status, setStatus] = useState("")
   const [message, setMessage] = useState("")
   const [isOpen, setIsOpen] = useState(false)
 
-  const loadOffers = useCallback(async () => {
-    const controller = new AbortController()
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  })
 
-    setLoading(true)
+  const [rowCount, setRowCount] = useState(0)
 
-    try {
-      const res = await getOffers(controller.signal)
+  const isFirstLoad = useRef(true)
 
-      if (res.status === 200) {
-        setOffers(res?.data?.data?.content ?? [])
+  const loadOffers = useCallback(
+    async (signal, isBackground = false) => {
+      try {
+        if (isBackground) {
+          setBackgroundLoading(true)
+        } else {
+          setInitialLoading(true)
+        }
+
+        const res = await getOffers(
+          paginationModel.page,
+          paginationModel.pageSize,
+          signal,
+        )
+
+        if (res.status === 200) {
+          setOffers(res?.data?.data?.content ?? [])
+          setRowCount(res.data?.data?.totalElements)
+        }
+      } catch (error) {
+        if (
+          error.name === "CanceledError" ||
+          error.name === "AbortError" ||
+          error.code === "ERR_CANCELED"
+        ) {
+          return
+        }
+
+        console.error("offers table error", error)
+
+        if (error.response) {
+          const statusCode = error.response.status
+
+          if (statusCode === 404) {
+            setError("You haven't received any blood offers yet.")
+          } else {
+            setError(error.response?.data?.message || "Server error")
+          }
+        } else if (error.request) {
+          setError("Network connection failed. Please check you internet.")
+        } else {
+          setError("An unexpected error occurred. Please refresh the page.")
+        }
+      } finally {
+        setBackgroundLoading(false)
+        setInitialLoading(false)
       }
-    } catch (error) {
-      if (
-        error.name === "CanceledError" ||
-        error.name === "AbortError" ||
-        error.code === "ERR_CANCELED"
-      ) {
-        return
-      }
-
-      console.error("offers table error", error)
-      const errorMessage =
-        error.response?.data?.message || "Failed to load details"
-
-      setIsOpen(true)
-      setMessage(errorMessage)
-      setStatus("error")
-    } finally {
-      if (!controller.signal?.aborted) {
-        setLoading(false)
-      }
-    }
-  }, [])
+    },
+    [paginationModel],
+  )
 
   useEffect(() => {
-    loadOffers()
+    const controller = new AbortController()
+
+    loadOffers(controller.signal, !isFirstLoad.current)
+
+    isFirstLoad.current = false
+
+    return () => controller.abort()
   }, [loadOffers])
 
   const onAccept = async (id) => {
+    if (loadingRowId) return
+
     setLoadingRowId(id)
     setLoadingActionType("accept")
 
@@ -156,11 +107,11 @@ const OffersTable = () => {
       const res = await acceptOffer(id)
 
       if (res.status === 200) {
-        await loadOffers()
-
         setIsOpen(true)
         setMessage(res?.data?.message || "Accepted successfully")
         setStatus("success")
+
+        await loadOffers(true)
       }
     } catch (error) {
       console.error("accept error", error)
@@ -175,6 +126,8 @@ const OffersTable = () => {
   }
 
   const onDecline = async (id) => {
+    if (loadingRowId) return
+
     setLoadingRowId(id)
     setLoadingActionType("decline")
 
@@ -182,11 +135,11 @@ const OffersTable = () => {
       const res = await declineOffer(id)
 
       if (res.status === 200) {
-        await loadOffers()
-
         setIsOpen(true)
         setMessage(res?.data?.message || "Declined successfully")
         setStatus("success")
+
+        await loadOffers(true)
       }
     } catch (error) {
       console.error("decline error", error)
@@ -269,15 +222,15 @@ const OffersTable = () => {
         ),
       },
     ],
-    [onAccept, onDecline, onView],
+    [onAccept, onDecline, onView, loadingRowId, loadingActionType],
   )
 
-  if (loading) {
+  if (initialLoading) {
     return <Progress />
   }
 
-  if (offers.length === 0 || offers === undefined) {
-    return <FailureFallback />
+  if (error) {
+    return <FailureFallback message={error} />
   }
 
   return (
@@ -286,7 +239,14 @@ const OffersTable = () => {
         Received Offers
       </Typography>
 
-      <Table columns={columns} rows={offers} loading={loading} />
+      <Table
+        columns={columns}
+        rows={offers}
+        loading={backgroundLoading}
+        rowCount={rowCount}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+      />
 
       <SnackBar
         open={isOpen}

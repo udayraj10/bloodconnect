@@ -1,19 +1,25 @@
 import { DataGrid } from "@mui/x-data-grid"
 
-const Table = ({ columns, rows, loading }) => {
+const Table = ({
+  columns,
+  rows,
+  loading,
+  rowCount,
+  paginationModel,
+  setPaginationModel,
+}) => {
   return (
     <DataGrid
       columns={columns}
       rows={rows}
       loading={loading}
+      rowCount={rowCount}
+      paginationMode="server"
+      paginationModel={paginationModel}
+      onPaginationModelChange={setPaginationModel}
       disableColumnMenu
       rowSelection={false}
-      initialState={{
-        pagination: {
-          paginationModel: { pageSize: 5 },
-        },
-      }}
-      pageSizeOptions={[5]}
+      pageSizeOptions={[10]}
       sx={{
         border: 1,
         borderColor: "divider",
