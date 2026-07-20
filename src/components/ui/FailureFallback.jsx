@@ -1,23 +1,12 @@
 import { Box, Typography } from "@mui/material"
 
-const FailureFallback = () => {
+const FailureFallback = ({
+  message = "Something went wrong, Please try again later.",
+}) => {
   return (
     <Box sx={{ p: 2 }}>
-      <Typography
-        variant="body1"
-        component="h1"
-        color="error"
-        sx={{ textAlign: "center" }}
-      >
-        Something went wrong
-      </Typography>
-      <Typography
-        variant="body2"
-        component="h1"
-        color="error"
-        sx={{ textAlign: "center" }}
-      >
-        Please check your internet connection
+      <Typography variant="body1" component="h1" sx={{ textAlign: "center" }}>
+        {message}
       </Typography>
     </Box>
   )
