@@ -11,9 +11,8 @@ import Chip from "../../../components/ui/Chip"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import Divider from "@mui/material/Divider"
-import { formatDate } from "../../../utils/formatDate"
-import { urgencyVariant, offerStatusVariant } from "../../../utils/chipUtils"
 import { useSnackbar } from "../../../hooks/useSnackbar"
+import { formatOfferData } from "../utils/formatOfferData"
 
 const OfferDetailsCard = () => {
   const { id } = useParams()
@@ -100,27 +99,7 @@ const OfferDetailsCard = () => {
     }
   }
 
-  const detailItems = [
-    { label: "Offer ID", value: offerState.offer?.id || "—" },
-    { label: "Blood group", value: offerState.offer?.bloodGroup || "—" },
-
-    { label: "Requested by", value: offerState.offer?.requestedBy || "—" },
-    { label: "City", value: offerState.offer?.city || "—" },
-    {
-      label: "Urgency",
-      value: offerState.offer?.urgencyLevel || "—",
-      component: "chip",
-      variant: urgencyVariant(offerState.offer?.urgencyLevel || "-"),
-    },
-    { label: "Offered at", value: formatDate(offerState.offer?.offeredAt) },
-    {
-      label: "Status",
-      value: offerState.offer?.status || "—",
-      component: "chip",
-      variant: offerStatusVariant(offerState.offer?.status || "-"),
-    },
-    { label: "Responded at", value: formatDate(offerState.offer?.respondedAt) },
-  ]
+  const offerData = formatOfferData(offerState.offer)
 
   const isCompleted =
     (offerState.offer?.status ?? "").toLowerCase() === "completed"
@@ -163,7 +142,7 @@ const OfferDetailsCard = () => {
         </Typography>
 
         <Grid container spacing={{ xs: 2, sm: 2.5 }} sx={{ px: 3, pb: 3 }}>
-          {detailItems.map((item) => (
+          {offerData.map((item) => (
             <Grid item size={{ xs: 12, sm: 6 }} key={item.label}>
               <Box
                 sx={{
