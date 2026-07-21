@@ -6,7 +6,7 @@ import SnackBar from "../../../components/ui/SnackBar"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import { useOffers } from "../hooks/useOffers"
-import { getOffersColumns } from "./offersColumns"
+import { getOffersColumns } from "../constants/tableColumns"
 
 const OffersTable = () => {
   const {
