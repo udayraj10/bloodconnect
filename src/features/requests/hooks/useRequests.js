@@ -1,0 +1,141 @@
+import { useState, useEffect, useCallback, useMemo } from "react"
+import { useNavigate } from "react-router-dom"
+import { cancelRequest } from "../api/request.api"
+import { useSnackbar } from "../../../hooks/useSnackbar"
+import { getBloodRequests } from "../api/request.api"
+
+export const useRequests = () => {
+  const navigate = useNavigate()
+  const [requestState, setRequestState] = useState({
+    requests: [],
+    isLoading: true,
+  })
+  const [loadingRowId, setLoadingRowId] = useState(null)
+
+  const {
+    isOpen: isSnackbarOpen,
+    message: snackbarMessage,
+    status: snackbarStatus,
+    showSnackbar,
+    hideSnackbar,
+  } = useSnackbar()
+
+  const [error, setError] = useState("")
+  const [rowCount, setRowCount] = useState(0)
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  })
+
+  const fetchRequests = useCallback(async (page, pageSize, signal) => {
+    try {
+      const res = await getBloodRequests(page, pageSize, signal)
+
+      if (res.status === 200) {
+        setRequestState({
+          requests: res?.data?.data?.content ?? [],
+          isLoading: false,
+        })
+
+        setRowCount(res.data?.data?.totalElements ?? 0)
+        setError("")
+      }
+    } catch (error) {
+      if (
+        ["CanceledError", "AbortError"].includes(error.name) ||
+        error.code === "ERR_CANCELED"
+      ) {
+        return
+      }
+
+      setRequestState((prev) => ({ ...prev, isLoading: false }))
+
+      if (error.response) {
+        setError(
+          error.response.status === 404
+            ? "Make your first blood request."
+            : error.response?.data?.message || "Server error",
+        )
+      } else if (error.request) {
+        if (navigator.onLine) {
+          setError(
+            "Service is temporarily unavailable. Please try again shortly.",
+          )
+        } else {
+          setError("Network connection failed. Please check your internet.")
+        }
+      } else {
+        setError("An unexpected error occurred. Please refresh the page.")
+      }
+      console.error("Request table error", error)
+    }
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const loadRequests = async () => {
+      setRequestState((prev) => ({ ...prev, isLoading: true }))
+      setError("")
+
+      await fetchRequests(
+        paginationModel.page,
+        paginationModel.pageSize,
+        controller.signal,
+      )
+    }
+
+    loadRequests()
+    return () => controller.abort()
+  }, [paginationModel.page, paginationModel.pageSize, fetchRequests])
+
+  const onCancel = useCallback(
+    async (id) => {
+      if (loadingRowId) return
+
+      setLoadingRowId(id)
+      try {
+        const res = await cancelRequest(id)
+
+        if (res.status === 200) {
+          await fetchRequests(paginationModel.page, paginationModel.pageSize)
+          showSnackbar("success", res?.data?.message || "Request cancelled")
+        }
+      } catch (error) {
+        showSnackbar(
+          "error",
+          error.response?.data?.message || "Request cancellation failed",
+        )
+        console.error("cancel failed", error)
+      } finally {
+        setLoadingRowId(null)
+      }
+    },
+    [fetchRequests, loadingRowId],
+  )
+
+  const onView = useCallback(
+    (id) => {
+      navigate(`/requests/${id}`)
+    },
+    [navigate],
+  )
+
+  return {
+    fetchRequests,
+    requestState,
+    error,
+    rowCount,
+    paginationModel,
+    setPaginationModel,
+    loadingRowId,
+    onCancel,
+    onView,
+    toast: {
+      open: isSnackbarOpen,
+      message: snackbarMessage,
+      status: snackbarStatus,
+      hideSnackbar,
+    },
+  }
+}

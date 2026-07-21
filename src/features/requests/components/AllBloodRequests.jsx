@@ -1,129 +1,30 @@
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useMemo } from "react"
 import NoteAltIcon from "@mui/icons-material/NoteAlt"
-import { useNavigate } from "react-router-dom"
 import SnackBar from "../../../components/ui/SnackBar"
-import { cancelRequest } from "../api/request.api"
-import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
-import { Stack } from "@mui/material"
+import Box from "@mui/material/Box"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
-import Box from "@mui/material/Box"
-import Chip from "../../../components/ui/Chip"
-import { urgencyVariant, requestStatusVariant } from "../../../utils/chipUtils"
+import { getRequestsColumns } from "./RequestsColumns"
+import { useRequests } from "../hooks/useRequests"
 
-const STATIC_COLUMNS = [
-  { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 130 },
-  { field: "city", headerName: "City", flex: 1.2, minWidth: 120 },
-  {
-    field: "urgencyLevel",
-    headerName: "Urgency",
-    flex: 1.2,
-    minWidth: 130,
-    renderCell: (params) => (
-      <Chip variant={urgencyVariant(params.value)}>{params.value}</Chip>
-    ),
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    flex: 1,
-    minWidth: 100,
-    renderCell: (params) => (
-      <Chip variant={requestStatusVariant(params.value)}>{params.value}</Chip>
-    ),
-  },
-]
+const AllBloodRequests = ({ data }) => {
+  const {
+    requestState,
+    rowCount,
+    paginationModel,
+    setPaginationModel,
+    loadingRowId,
+    onCancel,
+    onView,
+    toast,
+  } = data
 
-const ActionCell = ({ rowId, status, onCancel, onView }) => {
-  const handleCancelClick = (e) => {
-    e.stopPropagation()
-    onCancel(rowId)
-  }
-
-  const handleViewClick = (e) => {
-    e.stopPropagation()
-    onView(rowId)
-  }
-
-  const isCancelled = status?.toLowerCase() === "cancelled"
-  const isFulfilled = status?.toLowerCase() === "fulfilled"
-
-  return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{ alignItems: "center", height: "100%" }}
-    >
-      <Button
-        variant="outlined"
-        disabled={isCancelled}
-        size="small"
-        onClick={handleCancelClick}
-        sx={{ display: isFulfilled ? "none" : "block" }}
-      >
-        {isCancelled ? "Cancelled" : "Cancel"}
-      </Button>
-      <Button variant="contained" size="small" onClick={handleViewClick}>
-        View
-      </Button>
-    </Stack>
-  )
-}
-
-const AllBloodRequests = ({ requests, loadRequests, loading }) => {
-  const navigate = useNavigate()
-
-  const onCancel = useCallback(
-    async (id) => {
-      try {
-        const res = await cancelRequest(id)
-
-        if (res.status === 200) {
-          loadRequests()
-          setIsOpen(true)
-          setMessage(res?.data?.message)
-          setStatus("success")
-        }
-      } catch (error) {
-        console.error("cancel failed", error)
-
-        setIsOpen(true)
-        setMessage(error.response?.data?.message || "Cancel failed")
-        setStatus("error")
-      }
-    },
-    [loadRequests],
-  )
-
-  const onView = useCallback(
-    (id) => {
-      navigate(`/requests/${id}`)
-    },
-    [navigate],
-  )
+  const { requests, isLoading } = requestState
 
   const columns = useMemo(
-    () => [
-      ...STATIC_COLUMNS,
-      {
-        field: "action",
-        headerName: "Action",
-        flex: 1,
-        minWidth: 180,
-        sortable: false,
-        filterable: false,
-        renderCell: (params) => (
-          <ActionCell
-            rowId={params.row.id}
-            status={params.row.status}
-            onCancel={onCancel}
-            onView={onView}
-          />
-        ),
-      },
-    ],
-    [onCancel, navigate],
+    () => getRequestsColumns({ onCancel, onView, loadingRowId }),
+    [(onCancel, onView, loadingRowId)],
   )
 
   return (
@@ -143,7 +44,21 @@ const AllBloodRequests = ({ requests, loadRequests, loading }) => {
         </Typography>
       </Box>
 
-      <Table columns={columns} rows={requests} loading={loading} />
+      <Table
+        columns={columns}
+        rows={requests}
+        loading={isLoading}
+        rowCount={rowCount}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+      />
+
+      <SnackBar
+        open={toast.open}
+        message={toast.message}
+        handleClose={toast.hideSnackbar}
+        status={toast.status}
+      />
     </TableBox>
   )
 }

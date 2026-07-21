@@ -1,7 +1,13 @@
 import api from "../../../services/axios"
 
-export const getOffers = (signal) => {
-  return api.get("/offers/", { signal })
+export const getOffers = (page, size, signal) => {
+  return api.get("/offers/", {
+    params: {
+      page,
+      size,
+    },
+    signal,
+  })
 }
 
 export const getOffer = (id, signal) => {

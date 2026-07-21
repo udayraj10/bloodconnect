@@ -25,7 +25,7 @@ const LoginForm = ({ updateRegister }) => {
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
-      email: "gaurav.t@gmail.com",
+      email: "gaurav.s@outlook.com",
       password: "000000",
     },
   })
@@ -59,11 +59,9 @@ const LoginForm = ({ updateRegister }) => {
       onSubmit={handleSubmit(onLogin)}
       elevation={2}
       sx={{
-        width: {
-          xs: "90vw",
-          sm: "50vw",
-          md: "30vw",
-        },
+        width: "100%",
+        maxWidth: "28rem",
+        mx: 2,
       }}
     >
       <CardHeader
