@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
-import { getRequestsColumns } from "./RequestsColumns"
+import { getRequestsColumns } from "../constants/tableColumns"
 import { useRequests } from "../hooks/useRequests"
 
 const AllBloodRequests = ({ data }) => {
