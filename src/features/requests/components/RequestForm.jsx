@@ -1,24 +1,19 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Card from "@mui/material/Card"
-import CardActions from "@mui/material/CardActions"
-import CardContent from "@mui/material/CardContent"
-import CardHeader from "@mui/material/CardHeader"
+import Grid from "@mui/material/Grid"
 import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
 import FormAutocomplete from "../../../components/ui/FormAutocomplete"
 import FormTextField from "../../../components/ui/FormTextField"
 import { bloodGroupOptions, urgencyOptions } from "../../../utils/options"
-import { Typography } from "@mui/material"
 import SnackBar from "../../../components/ui/SnackBar"
+import { useSnackbar } from "../../../hooks/useSnackbar"
 import { createRequest } from "../api/request.api"
 
-const RequestForm = ({ loadRequests }) => {
+const RequestForm = ({ fetchRequests, paginationModel }) => {
   const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState("")
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const { isOpen, message, status, showSnackbar, hideSnackbar } = useSnackbar()
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -33,21 +28,14 @@ const RequestForm = ({ loadRequests }) => {
     try {
       setLoading(true)
       const res = await createRequest(data)
-      if (res.status == 201) {
+      if (res.status === 201) {
         reset()
-
-        setIsOpen(true)
-        setMessage(res?.data?.message)
-        setStatus("success")
-
-        loadRequests()
+        showSnackbar("success", res?.data?.message || "Request created")
+        await fetchRequests(paginationModel.page, paginationModel.pageSize)
       }
     } catch (error) {
+      showSnackbar("error", error.response?.data?.message || "Request failed")
       console.error("create request failed", error)
-
-      setIsOpen(true)
-      setMessage(error.response?.data?.message || "Failed request")
-      setStatus("error")
     } finally {
       setLoading(false)
     }
@@ -59,95 +47,85 @@ const RequestForm = ({ loadRequests }) => {
 
   return (
     <>
-      <Card
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        variant="outlined"
-        sx={{ p: 2 }}
-      >
-        <CardHeader
-          title={<Typography variant="h6">Create blood request</Typography>}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid
+          container
+          spacing={2}
           sx={{
-            p: 0,
-            backgroundColor: "transparent",
+            backgroundColor: "#fff",
+            p: 2,
+            borderRadius: 1,
           }}
-        />
+        >
+          <Grid size={12}>
+            <Typography variant="h6">Create blood request</Typography>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormAutocomplete
+              name="bloodGroup"
+              control={control}
+              label="Blood Group"
+              options={bloodGroupOptions}
+              rules={{ required: "Blood group is required" }}
+              fullWidth
+            />
+          </Grid>
 
-        <CardContent sx={{ px: 0, pt: 1 }}>
-          <Stack spacing={2.5}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: 2,
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormTextField
+              name="city"
+              control={control}
+              label="City"
+              rules={{ required: "City is required" }}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormAutocomplete
+              name="urgencyLevel"
+              control={control}
+              label="Urgency"
+              options={urgencyOptions}
+              rules={{ required: "Urgency is required" }}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormTextField
+              name="message"
+              control={control}
+              label="Message"
+              rules={{
+                required: "Message is required",
+                minLength: { value: 5, message: "Minimum 5 characters" },
               }}
-            >
-              <FormAutocomplete
-                name="bloodGroup"
-                control={control}
-                label="Blood Group"
-                options={bloodGroupOptions}
-                rules={{ required: "Blood group is required" }}
-                fullWidth
-              />
+              fullWidth
+            />
+          </Grid>
 
-              <FormTextField
-                name="city"
-                control={control}
-                label="City"
-                rules={{ required: "City is required" }}
-                fullWidth
-              />
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: 2,
-              }}
-            >
-              <FormAutocomplete
-                name="urgencyLevel"
-                control={control}
-                label="Urgency"
-                options={urgencyOptions}
-                rules={{ required: "Urgency is required" }}
-                fullWidth
-              />
-
-              <FormTextField
-                name="message"
-                control={control}
-                label="Message"
-                rules={{
-                  required: "Message is required",
-                  minLength: { value: 5, message: "Minimum 5 characters" },
-                }}
-                fullWidth
-              />
-            </Box>
-          </Stack>
-        </CardContent>
-
-        <CardActions sx={{ px: 0, gap: 1 }}>
-          <Button type="button" variant="outlined" onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            loading={loading}
-            loadingPosition="start"
-            variant="contained"
-          >
-            Submit Request
-          </Button>
-        </CardActions>
-      </Card>
+          <Grid size={12}>
+            <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+              <Button type="button" variant="outlined" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                loading={loading}
+                loadingPosition="start"
+                variant="contained"
+              >
+                Submit Request
+              </Button>
+            </Stack>
+          </Grid>
+        </Grid>
+      </form>
 
       <SnackBar
         open={isOpen}
-        handleClose={() => setIsOpen(false)}
+        handleClose={hideSnackbar}
         message={message}
         status={status}
       />
