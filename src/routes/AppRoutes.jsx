@@ -12,8 +12,10 @@ import { UserProfilePage } from "../pages/UserProfilePage"
 import NotFound from "../pages/NotFound"
 import AppLayout from "../components/layout/AppLayout"
 import ProtectedRoute from "../components/layout/ProtectedRoute"
+import HomePage from "../pages/HomePage"
 
 const titleConfig = [
+  { path: "/home", title: "Home" },
   { path: "/", title: "Dashboard" },
   { path: "/auth", title: "Authentication" },
   { path: "/requests", title: "Requests" },
@@ -47,6 +49,7 @@ const AppRoutes = () => {
     <>
       <PageTitleUpdater />
       <Routes>
+        <Route path="/home" element={<HomePage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={<NotFound />} />
 
