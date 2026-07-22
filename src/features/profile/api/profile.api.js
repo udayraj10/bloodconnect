@@ -19,11 +19,3 @@ export const changePassword = (data) => {
 export const deactivate = () => {
   return api.patch("/users/me/deactivate")
 }
-
-export const getStats = () => {
-  return api.get("/users/me/stats")
-}
-
-export const searchByUsername = (username) => {
-  return api.get(`/users/search?name=${username}`)
-}
