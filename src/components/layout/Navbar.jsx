@@ -31,10 +31,7 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
         sx={{
           justifyContent: "space-between",
           py: 0.5,
-          maxHeight: {
-            xs: 65,
-            md: 70,
-          },
+          height: 70,
         }}
       >
         {/* Logo */}

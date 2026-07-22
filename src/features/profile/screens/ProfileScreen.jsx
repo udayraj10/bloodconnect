@@ -19,7 +19,7 @@ const ProfileScreen = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        mt: { xs: 0.5, sm: 1 },
+        mt: { xs: 1, sm: 2 },
         mb: 4,
       }}
     >

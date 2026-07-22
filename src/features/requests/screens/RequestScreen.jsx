@@ -16,7 +16,7 @@ const RequestScreen = () => {
   if (error) return <FailureFallback message={error} />
 
   return (
-    <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
+    <Box sx={{ mt: { xs: 1, sm: 2 }, mb: 4 }}>
       <RequestForm
         fetchRequests={fetchRequests}
         paginationModel={paginationModel}

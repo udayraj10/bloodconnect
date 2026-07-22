@@ -13,7 +13,7 @@ const SearchScreen = () => {
   }
 
   return (
-    <Box sx={{ mt: { sm: 1 } }}>
+    <Box sx={{ mt: { xs: 1, sm: 1.5 } }}>
       <SearchBar
         value={username}
         onChange={(event) => setUsername(event.target.value)}

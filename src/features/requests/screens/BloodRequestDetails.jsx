@@ -101,7 +101,7 @@ const BloodRequestDetails = () => {
   }
 
   return (
-    <Stack spacing={3} sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
+    <Stack spacing={3} sx={{ mt: { xs: 1, sm: 2 }, mb: 4 }}>
       <Grid
         container
         spacing={2}
