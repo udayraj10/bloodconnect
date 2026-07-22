@@ -38,6 +38,12 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
 
   const currentPath = location.pathname
 
+  const handleItemClick = () => {
+    if (!isDesktop) {
+      onToggle()
+    }
+  }
+
   return (
     <Drawer
       variant={isDesktop ? "permanent" : "temporary"}
@@ -78,6 +84,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
                   component={Link}
                   to={item.path}
                   selected={isSelected}
+                  onClick={handleItemClick}
                   sx={{
                     color: "text.primary",
 
