@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Box, Paper, Typography, IconButton } from "@mui/material"
+import { Box, Stack, Typography, Pagination, Divider } from "@mui/material"
+import FailureFallback from "../../../components/ui/FailureFallback"
 import { searchByUsername } from "../api/search.api"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
-import VisibilityIcon from "@mui/icons-material/Visibility"
 
 const SearchResults = ({ username }) => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
+
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const pageSize = 5
 
   const navigate = useNavigate()
 
-  const onView = (id) => {
-    navigate(`/search/${id}`)
-  }
+  useEffect(() => {
+    setPage(1)
+  }, [username])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -22,27 +26,39 @@ const SearchResults = ({ username }) => {
     async function loadUser() {
       try {
         setLoading(true)
-        setMessage("")
+        setError("")
 
-        const res = await searchByUsername(username, controller.signal)
+        const res = await searchByUsername(
+          username,
+          page - 1,
+          pageSize,
+          controller.signal,
+        )
 
         if (res.status === 200) {
           setUsers(res?.data?.data?.content ?? [])
+          setTotalPages(res?.data?.data?.totalPages ?? 0)
         }
-      } catch (error) {
+      } catch (err) {
         if (
-          error.name === "CanceledError" ||
-          error.name === "AbortError" ||
-          error.code === "ERR_CANCELED"
+          ["CanceledError", "AbortError"].includes(err.name) ||
+          err.code === "ERR_CANCELED"
         ) {
           return
         }
 
-        console.error("stas loading error", error)
-        const errorMessage =
-          error.response?.data?.message || "Failed to load user by username"
-
-        setMessage(errorMessage)
+        if (err.response) {
+          setError(err.response?.data?.message || "Server error")
+        } else if (err.request) {
+          setError(
+            navigator.onLine
+              ? "Service is temporarily unavailable. Please try again shortly."
+              : "Network connection failed. Please check your internet.",
+          )
+        } else {
+          setError("An unexpected error occurred. Please refresh the page.")
+        }
+        console.error("Search error", err)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -50,99 +66,128 @@ const SearchResults = ({ username }) => {
       }
     }
 
-    loadUser()
+    if (username) {
+      loadUser()
+    }
 
     return () => controller.abort()
-  }, [username])
+  }, [username, page])
 
-  if (message) {
-    return (
-      <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
-        {message}
-      </Typography>
-    )
+  const handlePageChange = (_, value) => {
+    setPage(value)
   }
 
+  const handleUserClick = (id) => {
+    navigate(`/search/${id}`)
+  }
+
+  const handleKeyDown = (event, id) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      navigate(`/search/${id}`)
+    }
+  }
+
+  if (error) return <FailureFallback message={error} />
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 2,
-        mb: 5,
-      }}
-    >
-      {users.map((user, index) => (
-        <Paper
-          key={index}
-          variant="outlined"
+    <Stack spacing={2} sx={{ alignItems: "center", mb: 5, width: "100%" }}>
+      {users.length > 0 && (
+        <Box
           sx={{
-            p: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 2,
-            width: {
-              xs: "100%",
-              md: "560px",
-              lg: "640px",
-              xl: "720px",
-            },
+            width: "100%",
+            maxWidth: "40rem",
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            boxShadow: 1,
+            overflow: "hidden",
           }}
         >
-          <Box>
-            <Typography variant="h6" component="h3">
-              {user.fullName}
-            </Typography>
+          <Stack divider={<Divider flexItem />}>
+            {users.map((user, index) => {
+              const userId = user.id ?? index
 
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                mt: 0.5,
-                alignItems: "center",
-                color: "text.secondary",
-              }}
-            >
-              <Typography variant="body2">Group: {user.bloodGroup}</Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  color: "text.secondary",
-                }}
-              >
-                <LocationOnIcon fontSize="small" color="primary" />
-                <Typography variant="body2">{user.city}</Typography>
-              </Box>
-            </Box>
-          </Box>
+              return (
+                <Box
+                  key={userId}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleUserClick(user.id)}
+                  onKeyDown={(e) => handleKeyDown(e, user.id)}
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: 2,
+                    cursor: "pointer",
+                    "&:hover": {
+                      bgcolor: "action.hover",
+                    },
+                    "&:focus-visible": {
+                      outline: "2px solid",
+                      outlineColor: "primary.main",
+                      outlineOffset: "-3px",
+                    },
+                  }}
+                >
+                  <Stack spacing={0.5}>
+                    <Typography
+                      variant="body1"
+                      component="h3"
+                      sx={{ fontWeight: 500 }}
+                    >
+                      {user.fullName}
+                    </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: "500",
-                color: user.isAvailable ? "success.main" : "error.main",
-              }}
-            >
-              {user.isAvailable ? "Available" : "Unavailable"}
-            </Typography>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      alignItems="center"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      <Typography variant="body2">
+                        Group: {user.bloodGroup}
+                      </Typography>
+                      <Stack direction="row" spacing={0.5} alignItems="center">
+                        <LocationOnIcon fontSize="small" color="primary" />
+                        <Typography variant="body2">{user.city}</Typography>
+                      </Stack>
+                    </Stack>
+                  </Stack>
 
-            <IconButton
-              color="primary"
-              onClick={() => onView(user.id)}
-              aria-label="view user details"
-            >
-              <VisibilityIcon />
-            </IconButton>
-          </Box>
-        </Paper>
-      ))}
-    </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 500,
+                      color: user.isAvailable ? "success.main" : "error.main",
+                      display: {
+                        xs: "none",
+                        sm: "block",
+                      },
+                    }}
+                  >
+                    {user.isAvailable ? "Available" : "Not available"}
+                  </Typography>
+                </Box>
+              )
+            })}
+          </Stack>
+        </Box>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          disabled={loading}
+          color="primary"
+          sx={{ mt: 2 }}
+        />
+      )}
+    </Stack>
   )
 }
 
