@@ -1,22 +1,24 @@
 import { useState, useEffect } from "react"
 import { getStats } from "../api/stats.api"
-import SnackBar from "../../../components/ui/SnackBar"
 import FallbackFailure from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import Box from "@mui/material/Box"
-import CircularProgress from "@mui/material/CircularProgress"
 import StatsItem from "../components/StatsItem"
 import Divider from "@mui/material/Divider"
 import Typography from "@mui/material/Typography"
 import Piechart from "../components/Piechart"
 import Stack from "@mui/material/Stack"
+import {
+  getDonationData,
+  getRequestData,
+  getOverview,
+  getRequestDistribution,
+} from "../utils/formatStatsData"
 
 const StatsScreen = () => {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [status, setStatus] = useState("")
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     const controller = new AbortController()
@@ -39,13 +41,21 @@ const StatsScreen = () => {
           return
         }
 
-        console.error("stas loading error", error)
-        const errorMessage =
-          error.response?.data?.message || "Failed to load stats"
+        if (error.response) {
+          setError(error.response?.data?.message || "Server error")
+        } else if (error.request) {
+          if (navigator.onLine) {
+            setError(
+              "Service is temporarily unavailable. Please try again shortly.",
+            )
+          } else {
+            setError("Network connection failed. Please check your internet.")
+          }
+        } else {
+          setError("An unexpected error occurred. Please refresh the page.")
+        }
 
-        setIsOpen(true)
-        setMessage(errorMessage)
-        setStatus("error")
+        console.error("stas loading error", error)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -58,80 +68,17 @@ const StatsScreen = () => {
     return () => controller.abort()
   }, [])
 
-  const donationData = [
-    {
-      label: "Total Donations",
-      value: stats?.totalDonations ?? "-",
-      description: "Total number of blood donations made by you",
-    },
-    {
-      label: "Pending Offers",
-      value: stats?.pendingOffers ?? "-",
-      description: "Number of pending donation offers from you",
-    },
-    {
-      label: "Accepted Offers",
-      value: stats?.acceptedOffers ?? "-",
-      description: "Number of accepted donation offers from you",
-    },
-    {
-      label: "Completed Offers",
-      value: stats?.completedOffers ?? "-",
-      description: "Number of completed donation offers from you",
-    },
-    {
-      label: "Declined Offers",
-      value: stats?.declinedOffers ?? "-",
-      description: "Number of declined donation offers from you",
-    },
-    {
-      label: "Last Donation Date",
-      value: stats?.lastDonationDate || "-",
-      description: "Last date when you made a blood donation",
-    },
-  ]
+  const donationData = getDonationData(stats)
 
-  const requestData = [
-    {
-      label: "Total Requests",
-      value: stats?.totalRequestsMade ?? "-",
-      description: "Total number of blood requests made by you",
-    },
-    {
-      label: "Open Requests",
-      value: stats?.openRequests ?? "-",
-      description: "Number of open blood requests from you",
-    },
-    {
-      label: "Fulfilled Requests",
-      value: stats?.fulfilledRequests ?? "-",
-      description: "Number of fulfilled blood requests from you",
-    },
-    {
-      label: "Cancelled Requests",
-      value: stats?.cancelledRequests ?? "-",
-      description: "Number of cancelled blood requests from you",
-    },
-  ]
+  const requestData = getRequestData(stats)
 
-  const overview = [
-    { label: "Donations", value: stats?.totalDonations, color: "#e10600" },
-    { label: "Requests", value: stats?.totalRequestsMade, color: "#393cf9" },
-  ]
+  const overview = getOverview(stats)
 
-  const requestDistribution = [
-    { label: "Open", value: stats?.openRequests, color: "#393cf9" },
-    { label: "Fulfilled", value: stats?.fulfilledRequests, color: "#16a34a" },
-    { label: "Cancelled", value: stats?.cancelledRequests, color: "#ed6c02" },
-  ]
+  const requestDistribution = getRequestDistribution(stats)
 
-  if (loading) {
-    return <Progress />
-  }
+  if (loading) return <Progress />
 
-  if (stats === null || stats === undefined) {
-    return <FallbackFailure />
-  }
+  if (error) return <FallbackFailure message={error} />
 
   return (
     <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
@@ -162,13 +109,6 @@ const StatsScreen = () => {
           title="Request Status Distribution"
         />
       </Stack>
-
-      <SnackBar
-        open={isOpen}
-        message={message}
-        handleClose={() => setIsOpen(false)}
-        status={status}
-      />
     </Box>
   )
 }
