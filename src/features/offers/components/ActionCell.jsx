@@ -33,11 +33,7 @@ const ActionCell = ({
 
   if (status === "cancelled" || status === "closed") {
     return (
-      <Button
-        variant="text"
-        color="error"
-        sx={{ textTransform: "capitalize", cursor: "default" }}
-      >
+      <Button size="small" sx={{ textTransform: "capitalize" }} disabled>
         {status}
       </Button>
     )
@@ -45,7 +41,7 @@ const ActionCell = ({
 
   if (status === "declined") {
     return (
-      <Button variant="outlined" size="small" disabled>
+      <Button size="small" disabled>
         Declined
       </Button>
     )
@@ -71,7 +67,7 @@ const ActionCell = ({
       sx={{ height: "100%", alignItems: "center" }}
     >
       <Button
-        variant="outlined"
+        variant="contained"
         color="success"
         size="small"
         onClick={handleAcceptClick}
