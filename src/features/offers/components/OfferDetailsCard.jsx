@@ -114,16 +114,15 @@ const OfferDetailsCard = () => {
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        mt: { xs: 1, sm: 2   },
+        mt: { xs: 1, sm: 2 },
         mb: 4,
         px: { xs: 1, sm: 2 },
       }}
     >
       <Box
         sx={{
-          width: { xs: "100%", sm: 560, md: 720 },
-          maxWidth: 720,
-          minWidth: { xs: 0, sm: 320 },
+          width: "100%",
+          maxWidth: "45rem",
           border: "1px solid",
           borderColor: "divider",
           borderRadius: 1,
