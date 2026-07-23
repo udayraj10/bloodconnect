@@ -13,8 +13,6 @@ const RequestScreen = () => {
 
   if (isLoading && requests.length === 0) return <Progress />
 
-  if (error) return <FailureFallback message={error} />
-
   return (
     <Box sx={{ mt: { xs: 1, sm: 2 }, mb: 4 }}>
       <RequestForm
@@ -24,7 +22,11 @@ const RequestScreen = () => {
 
       <Divider sx={{ my: 2 }} />
 
-      <AllBloodRequests data={requestsData} />
+      {error ? (
+        <FailureFallback message={error} />
+      ) : (
+        <AllBloodRequests data={requestsData} />
+      )}
     </Box>
   )
 }
