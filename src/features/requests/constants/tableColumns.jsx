@@ -36,7 +36,7 @@ export const getDonorColumns = () => [
 ]
 
 export const getRequestsColumns = ({ onCancel, onView, loadingRowId }) => [
-  { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 130 },
+  { field: "bloodGroup", headerName: "Blood Group", flex: 1, minWidth: 120 },
   { field: "city", headerName: "City", flex: 1.2, minWidth: 120 },
   {
     field: "urgencyLevel",
@@ -51,7 +51,7 @@ export const getRequestsColumns = ({ onCancel, onView, loadingRowId }) => [
     field: "status",
     headerName: "Status",
     flex: 1,
-    minWidth: 100,
+    minWidth: 120,
     renderCell: (params) => (
       <Chip variant={requestStatusVariant(params.value)}>{params.value}</Chip>
     ),
