@@ -82,6 +82,8 @@ const SearchResults = ({ username }) => {
 
   if (loading && username !== "") return <Progress />
 
+  if (username === "") return
+
   if (error && users.length === 0) return <FailureFallback message={error} />
 
   return (
