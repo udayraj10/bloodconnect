@@ -6,6 +6,8 @@ import {
   useCallback,
 } from "react"
 import { getProfile } from "../features/profile/api/profile.api"
+import { getErrorMessage } from "../utils/getErrorMessage"
+import { set } from "react-hook-form"
 
 const AuthContext = createContext(null)
 
@@ -15,6 +17,7 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("token") || null,
   )
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   const logout = useCallback(() => {
     setToken(null)
@@ -37,16 +40,12 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken)
 
       try {
-        const { data } = await getProfile(storedToken)
-        setUser(data?.data ?? null)
-      } catch (error) {
-        const status = error?.response?.status
-
-        if (status === 401 || status === 403) {
-          logout()
-        } else {
-          console.warn("Profile fetch failed during initialization:", error)
-        }
+        const res = await getProfile(storedToken)
+        if (res.status === 200) setUser(res.data?.data ?? null)
+        setError("")
+      } catch (err) {
+        setError(getErrorMessage(err))
+        console.error("Profile fetch failed during initialization:", error)
       } finally {
         setLoading(false)
       }
@@ -60,20 +59,21 @@ export const AuthProvider = ({ children }) => {
     if (!currentToken) return
 
     try {
-      const { data } = await getProfile(currentToken)
-      setUser(data.data)
+      const res = await getProfile(currentToken)
+      if (res.status === 200) setUser(res.data?.data ?? null)
     } catch (e) {
       console.error("Failed to refresh user profile:", e)
     }
   }
 
   const login = async (newToken) => {
+    if (!newToken) return
     setToken(newToken)
     localStorage.setItem("token", newToken)
 
     try {
       const res = await getProfile(newToken)
-      setUser(res.data.data)
+      if (res.status === 200) setUser(res.data?.data ?? null)
     } catch (error) {
       console.error("login profile fetch failed:", error)
       logout()
@@ -87,6 +87,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     isAuthenticated: !!token,
     refreshUser,
+    loading,
+    error,
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
