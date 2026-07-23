@@ -23,7 +23,7 @@ const Piechart = ({ data, title }) => {
       </Typography>
 
       <PieChart
-        series={[{ innerRadius: 40, outerRadius: 80, data, arcLabel: "value" }]}
+        series={[{ innerRadius: 0, outerRadius: 80, data, arcLabel: "value" }]}
         width={180}
         height={180}
         sx={{
