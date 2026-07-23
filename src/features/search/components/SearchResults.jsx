@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Box, Stack, Typography, Pagination, Divider } from "@mui/material"
 import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import { searchByUsername } from "../api/search.api"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
 
@@ -87,6 +88,8 @@ const SearchResults = ({ username }) => {
       navigate(`/search/${id}`)
     }
   }
+
+  if (loading && username !== "") return <Progress />
 
   if (error) return <FailureFallback message={error} />
 
