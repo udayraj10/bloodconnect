@@ -11,9 +11,9 @@ import { useAuth } from "../../../context/AuthContext"
 const ProfileScreen = () => {
   const { user, loading, error } = useAuth()
 
-  if (loading && user === null) return <Progress />
+  if (loading && !user) return <Progress />
 
-  if (error) return <FailureFallback message={error} />
+  if (error && !user) return <FailureFallback message={error} />
 
   return (
     <Box

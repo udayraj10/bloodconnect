@@ -5,6 +5,7 @@ import Progress from "../../../components/ui/Progress"
 import ProfileCard from "../../../components/ui/ProfileCard"
 import { getUserById } from "../api/search.api"
 import FailureFallback from "../../../components/ui/FailureFallback"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const UserProfile = () => {
   const { id } = useParams()
@@ -18,27 +19,24 @@ const UserProfile = () => {
     async function loadUser() {
       try {
         setLoading(true)
-        setError("")
 
         const res = await getUserById(id, controller.signal)
 
         if (res.status === 200) {
           setUser(res?.data?.data || null)
+          setError("")
         }
-      } catch (error) {
+      } catch (err) {
         if (
-          error.name === "CanceledError" ||
-          error.name === "AbortError" ||
-          error.code === "ERR_CANCELED"
+          err.name === "CanceledError" ||
+          err.name === "AbortError" ||
+          err.code === "ERR_CANCELED"
         ) {
           return
         }
 
+        setError(getErrorMessage(err))
         console.error("search user error", error)
-        const errorMessage =
-          error.response?.data?.message || "Failed to load search user"
-
-        setError(errorMessage)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -51,9 +49,9 @@ const UserProfile = () => {
     return () => controller.abort()
   }, [id])
 
-  if (loading) return <Progress />
+  if (loading && !user) return <Progress />
 
-  if (error) return <FailureFallback message={error} />
+  if (error && !user) return <FailureFallback message={error} />
 
   return (
     <Box sx={{ mt: { xs: 1, sm: 1.5 } }}>

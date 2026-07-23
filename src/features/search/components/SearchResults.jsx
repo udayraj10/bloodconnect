@@ -5,6 +5,7 @@ import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import { searchByUsername } from "../api/search.api"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const SearchResults = ({ username }) => {
   const [users, setUsers] = useState([])
@@ -27,7 +28,6 @@ const SearchResults = ({ username }) => {
     async function loadUser() {
       try {
         setLoading(true)
-        setError("")
 
         const res = await searchByUsername(
           username,
@@ -39,6 +39,7 @@ const SearchResults = ({ username }) => {
         if (res.status === 200) {
           setUsers(res?.data?.data?.content ?? [])
           setTotalPages(res?.data?.data?.totalPages ?? 0)
+          setError("")
         }
       } catch (err) {
         if (
@@ -48,17 +49,7 @@ const SearchResults = ({ username }) => {
           return
         }
 
-        if (err.response) {
-          setError(err.response?.data?.message || "Server error")
-        } else if (err.request) {
-          setError(
-            navigator.onLine
-              ? "Service is temporarily unavailable. Please try again shortly."
-              : "Network connection failed. Please check your internet.",
-          )
-        } else {
-          setError("An unexpected error occurred. Please refresh the page.")
-        }
+        setError(getErrorMessage(err))
         console.error("Search error", err)
       } finally {
         if (!controller.signal?.aborted) {
@@ -91,7 +82,7 @@ const SearchResults = ({ username }) => {
 
   if (loading && username !== "") return <Progress />
 
-  if (error) return <FailureFallback message={error} />
+  if (error && users.length === 0) return <FailureFallback message={error} />
 
   return (
     <Stack spacing={2} sx={{ alignItems: "center", mb: 5, width: "100%" }}>

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { getOffers, acceptOffer, declineOffer } from "../api/offers.api"
 import { useSnackbar } from "../../../hooks/useSnackbar"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 export const useOffers = () => {
   const navigate = useNavigate()
@@ -40,34 +41,23 @@ export const useOffers = () => {
         setRowCount(res.data?.data?.totalElements ?? 0)
         setError("")
       }
-    } catch (error) {
+    } catch (err) {
       if (
-        ["CanceledError", "AbortError"].includes(error.name) ||
-        error.code === "ERR_CANCELED"
+        ["CanceledError", "AbortError"].includes(err.name) ||
+        err.code === "ERR_CANCELED"
       ) {
         return
       }
 
       setDataState((prev) => ({ ...prev, isLoading: false }))
 
-      if (error.response) {
-        setError(
-          error.response.status === 404
-            ? "You haven't received any blood offers yet."
-            : error.response?.data?.message || "Server error",
-        )
-      } else if (error.request) {
-        if (navigator.onLine) {
-          setError(
-            "Service is temporarily unavailable. Please try again shortly.",
-          )
-        } else {
-          setError("Network connection failed. Please check your internet.")
-        }
-      } else {
-        setError("An unexpected error occurred. Please refresh the page.")
-      }
-      console.error("offers table error", error)
+      const errMsg = getErrorMessage(err, {
+        statusMessages: {
+          404: "You haven't received any blood offers yet.",
+        },
+      })
+      setError(errMsg)
+      console.error("offers table error", err)
     }
   }, [])
 

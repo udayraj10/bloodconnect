@@ -13,6 +13,7 @@ import Progress from "../../../components/ui/Progress"
 import Divider from "@mui/material/Divider"
 import { useSnackbar } from "../../../hooks/useSnackbar"
 import { formatOfferData } from "../utils/formatOfferData"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const OfferDetailsCard = () => {
   const { id } = useParams()
@@ -36,32 +37,19 @@ const OfferDetailsCard = () => {
           })
           setError("")
         }
-      } catch (error) {
+      } catch (err) {
         if (
-          error.name === "CanceledError" ||
-          error.name === "AbortError" ||
-          error.code === "ERR_CANCELED"
+          err.name === "CanceledError" ||
+          err.name === "AbortError" ||
+          err.code === "ERR_CANCELED"
         ) {
           return
         }
 
         setOfferState((prev) => ({ ...prev, isLoading: false }))
+        setError(getErrorMessage(err))
 
-        if (error.response) {
-          setError(error.response?.data?.message || "Server error")
-        } else if (error.request) {
-          if (navigator.onLine) {
-            setError(
-              "Service is temporarily unavailable. Please try again shortly.",
-            )
-          } else {
-            setError("Network connection failed. Please check your internet.")
-          }
-        } else {
-          setError("An unexpected error occurred. Please refresh the page.")
-        }
-
-        console.error("offer loading error", error)
+        console.error("offer loading error", err)
       }
     },
     [id],
@@ -98,15 +86,14 @@ const OfferDetailsCard = () => {
       setCompleting(false)
     }
   }
+  const { offer, isLoading } = offerState
+  const offerData = formatOfferData(offer)
 
-  const offerData = formatOfferData(offerState.offer)
+  const isCompleted = (offer?.status ?? "").toLowerCase() === "completed"
 
-  const isCompleted =
-    (offerState.offer?.status ?? "").toLowerCase() === "completed"
+  if (isLoading && !offer) return <Progress />
 
-  if (offerState.isLoading) return <Progress />
-
-  if (error) return <FailureFallback message={error} />
+  if (error && !offer) return <FailureFallback message={error} />
 
   return (
     <Box

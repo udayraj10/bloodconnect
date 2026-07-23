@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { cancelRequest } from "../api/request.api"
 import { useSnackbar } from "../../../hooks/useSnackbar"
 import { getBloodRequests } from "../api/request.api"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 export const useRequests = () => {
   const navigate = useNavigate()
@@ -40,33 +41,22 @@ export const useRequests = () => {
         setRowCount(res.data?.data?.totalElements ?? 0)
         setError("")
       }
-    } catch (error) {
+    } catch (err) {
       if (
-        ["CanceledError", "AbortError"].includes(error.name) ||
-        error.code === "ERR_CANCELED"
+        ["CanceledError", "AbortError"].includes(err.name) ||
+        err.code === "ERR_CANCELED"
       ) {
         return
       }
 
       setRequestState((prev) => ({ ...prev, isLoading: false }))
 
-      if (error.response) {
-        setError(
-          error.response.status === 404
-            ? "Make your first blood request."
-            : error.response?.data?.message || "Server error",
-        )
-      } else if (error.request) {
-        if (navigator.onLine) {
-          setError(
-            "Service is temporarily unavailable. Please try again shortly.",
-          )
-        } else {
-          setError("Network connection failed. Please check your internet.")
-        }
-      } else {
-        setError("An unexpected error occurred. Please refresh the page.")
-      }
+      const errMsg = getErrorMessage(err, {
+        statusMessages: {
+          404: "You don't have any requests yet. Make your first request.",
+        },
+      })
+      setError(errMsg)
       console.error("Request table error", error)
     }
   }, [])
@@ -101,12 +91,12 @@ export const useRequests = () => {
           await fetchRequests(paginationModel.page, paginationModel.pageSize)
           showSnackbar("success", res?.data?.message || "Request cancelled")
         }
-      } catch (error) {
+      } catch (err) {
         showSnackbar(
           "error",
-          error.response?.data?.message || "Request cancellation failed",
+          err.response?.data?.message || "Request cancellation failed",
         )
-        console.error("cancel failed", error)
+        console.error("cancel failed", err)
       } finally {
         setLoadingRowId(null)
       }

@@ -12,6 +12,7 @@ import Progress from "../../../components/ui/Progress"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { getDonorColumns } from "../constants/tableColumns"
 import { formatRequestData } from "../utils/formatRequestData"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const BloodRequestDetails = () => {
   const { id } = useParams()
@@ -35,7 +36,6 @@ const BloodRequestDetails = () => {
     async function loadRequestDetails() {
       try {
         setRequestDetailsState((prev) => ({ ...prev, isLoading: true }))
-        setError("")
 
         const [requestRes, donorsRes] = await Promise.all([
           getBloodRequest(id, controller.signal),
@@ -54,6 +54,7 @@ const BloodRequestDetails = () => {
             isLoading: false,
           })
           setRowCount(donorsRes?.data?.data?.totalElements ?? 0)
+          setError("")
         }
       } catch (err) {
         if (
@@ -65,19 +66,7 @@ const BloodRequestDetails = () => {
 
         setRequestDetailsState((prev) => ({ ...prev, isLoading: false }))
 
-        if (err.response) {
-          setError(err.response?.data?.message || "Server error occurred.")
-        } else if (err.request) {
-          if (navigator.onLine) {
-            setError(
-              "Service is temporarily unavailable. Please try again shortly.",
-            )
-          } else {
-            setError("Network connection failed. Please check your internet.")
-          }
-        } else {
-          setError("An unexpected error occurred. Please refresh the page.")
-        }
+        setError(getErrorMessage(err))
         console.error("request details error", err)
       }
     }
@@ -96,7 +85,7 @@ const BloodRequestDetails = () => {
     return <Progress />
   }
 
-  if (error) {
+  if (error && !request && donors.length === 0) {
     return <FailureFallback message={error} />
   }
 

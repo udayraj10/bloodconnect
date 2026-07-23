@@ -14,6 +14,7 @@ import {
   getOverview,
   getRequestDistribution,
 } from "../utils/formatStatsData"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const StatsScreen = () => {
   const [stats, setStats] = useState(null)
@@ -31,31 +32,20 @@ const StatsScreen = () => {
 
         if (res.status === 200) {
           setStats(res?.data?.data ?? null)
+          setError("")
         }
-      } catch (error) {
+      } catch (err) {
         if (
-          error.name === "CanceledError" ||
-          error.name === "AbortError" ||
-          error.code === "ERR_CANCELED"
+          err.name === "CanceledError" ||
+          err.name === "AbortError" ||
+          err.code === "ERR_CANCELED"
         ) {
           return
         }
 
-        if (error.response) {
-          setError(error.response?.data?.message || "Server error")
-        } else if (error.request) {
-          if (navigator.onLine) {
-            setError(
-              "Service is temporarily unavailable. Please try again shortly.",
-            )
-          } else {
-            setError("Network connection failed. Please check your internet.")
-          }
-        } else {
-          setError("An unexpected error occurred. Please refresh the page.")
-        }
+        setError(getErrorMessage(err))
 
-        console.error("stas loading error", error)
+        console.error("stas loading error", err)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -76,9 +66,9 @@ const StatsScreen = () => {
 
   const requestDistribution = getRequestDistribution(stats)
 
-  if (loading) return <Progress />
+  if (loading && !stats) return <Progress />
 
-  if (error) return <FallbackFailure message={error} />
+  if (error && !stats) return <FallbackFailure message={error} />
 
   return (
     <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
