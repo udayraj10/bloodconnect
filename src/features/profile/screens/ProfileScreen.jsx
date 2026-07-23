@@ -3,16 +3,17 @@ import UpdateProfile from "../components/UpdateProfile"
 import { Typography } from "@mui/material"
 import ProfileCard from "../../../components/ui/ProfileCard"
 import FailureFallback from "../../../components/ui/FailureFallback"
+import Progress from "../../../components/ui/Progress"
 import Divider from "@mui/material/Divider"
 import ChangePassword from "../components/ChangePassword"
 import { useAuth } from "../../../context/AuthContext"
 
 const ProfileScreen = () => {
-  const { user } = useAuth()
+  const { user, loading, error } = useAuth()
 
-  if (user === null || user === undefined) {
-    return <FailureFallback />
-  }
+  if (loading && user === null) return <Progress />
+
+  if (error) return <FailureFallback message={error} />
 
   return (
     <Box

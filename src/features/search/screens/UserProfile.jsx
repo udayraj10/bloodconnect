@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Box } from "@mui/material"
-import { CircularProgress } from "@mui/material"
+import Progress from "../../../components/ui/Progress"
 import ProfileCard from "../../../components/ui/ProfileCard"
 import { getUserById } from "../api/search.api"
-import SnackBar from "../../../components/ui/SnackBar"
+import FailureFallback from "../../../components/ui/FailureFallback"
 
 const UserProfile = () => {
   const { id } = useParams()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [status, setStatus] = useState("")
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     const controller = new AbortController()
@@ -20,6 +18,7 @@ const UserProfile = () => {
     async function loadUser() {
       try {
         setLoading(true)
+        setError("")
 
         const res = await getUserById(id, controller.signal)
 
@@ -39,9 +38,7 @@ const UserProfile = () => {
         const errorMessage =
           error.response?.data?.message || "Failed to load search user"
 
-        setIsOpen(true)
-        setMessage(errorMessage)
-        setStatus("error")
+        setError(errorMessage)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -54,31 +51,13 @@ const UserProfile = () => {
     return () => controller.abort()
   }, [id])
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "30vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    )
-  }
+  if (loading) return <Progress />
+
+  if (error) return <FailureFallback message={error} />
 
   return (
-    <Box sx={{ mt: { xs: 0.5, md: 1 } }}>
+    <Box sx={{ mt: { xs: 1, sm: 1.5 } }}>
       <ProfileCard user={user} />
-
-      <SnackBar
-        open={isOpen}
-        message={message}
-        handleClose={() => setIsOpen(false)}
-        status={status}
-      />
     </Box>
   )
 }
