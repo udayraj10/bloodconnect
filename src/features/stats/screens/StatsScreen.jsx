@@ -70,6 +70,10 @@ const StatsScreen = () => {
 
   if (error && !stats) return <FallbackFailure message={error} />
 
+  const showOverview = stats
+    ? Boolean(stats.totalDonations || stats.totalRequestsMade)
+    : false
+
   return (
     <Box sx={{ mt: { xs: 0.5, sm: 1 }, mb: 4 }}>
       <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
@@ -88,17 +92,21 @@ const StatsScreen = () => {
 
       <Divider sx={{ my: 2 }} />
 
-      <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
-        Overview
-      </Typography>
+      {showOverview && (
+        <>
+          <Typography variant="h6" component="h1" sx={{ mb: 1 }}>
+            Overview
+          </Typography>
 
-      <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
-        <Piechart data={overview} title="Donations & Requests" />
-        <Piechart
-          data={requestDistribution}
-          title="Request Status Distribution"
-        />
-      </Stack>
+          <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
+            <Piechart data={overview} title="Donations & Requests" />
+            <Piechart
+              data={requestDistribution}
+              title="Request Status Distribution"
+            />
+          </Stack>
+        </>
+      )}
     </Box>
   )
 }
