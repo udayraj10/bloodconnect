@@ -106,7 +106,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
                     slotProps={{
                       primary: {
                         sx: {
-                          fontWeight: isSelected ? 500 : 300,
+                          fontWeight: isSelected ? 600 : 400,
                         },
                       },
                     }}
