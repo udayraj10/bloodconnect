@@ -1,9 +1,8 @@
-import Box from "@mui/material/Box"
+import { useState } from "react"
+import { Box, Stack, Typography } from "@mui/material"
 import bloodDonation from "../../../assets/bloodDonation.webp"
-import { display } from "@mui/system"
 import LoginForm from "../components/LoginForm"
 import RegisterForm from "../components/RegisterForm"
-import { useState } from "react"
 
 const AuthScreen = () => {
   const [isRegister, setIsRegister] = useState(true)
@@ -16,7 +15,6 @@ const AuthScreen = () => {
     <Box
       sx={{
         height: "100vh",
-        // overflow: "hidden",
         display: "flex",
       }}
     >
@@ -35,21 +33,23 @@ const AuthScreen = () => {
         }}
       />
 
-      <Box
+      <Stack
         sx={{
-          display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
           flexGrow: 1,
         }}
       >
+        <Typography variant="body2" color="error" sx={{ fontWeight: 500 }}>
+          *Response may take a moment. Please wait and retry.
+        </Typography>
         {isRegister ? (
           <LoginForm updateRegister={updateRegister} />
         ) : (
           <RegisterForm updateRegister={updateRegister} />
         )}
-      </Box>
+      </Stack>
     </Box>
   )
 }
