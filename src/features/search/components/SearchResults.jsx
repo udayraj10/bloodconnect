@@ -28,6 +28,7 @@ const SearchResults = ({ username }) => {
     async function loadUser() {
       try {
         setLoading(true)
+        setError("")
 
         const res = await searchByUsername(
           username,
@@ -39,7 +40,6 @@ const SearchResults = ({ username }) => {
         if (res.status === 200) {
           setUsers(res?.data?.data?.content ?? [])
           setTotalPages(res?.data?.data?.totalPages ?? 0)
-          setError("")
         }
       } catch (err) {
         if (
@@ -50,6 +50,8 @@ const SearchResults = ({ username }) => {
         }
 
         setError(getErrorMessage(err))
+        setUsers([])
+        setTotalPages(0)
         console.error("Search error", err)
       } finally {
         if (!controller.signal?.aborted) {
