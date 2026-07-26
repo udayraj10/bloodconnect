@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Box } from "@mui/material"
-import { CircularProgress } from "@mui/material"
+import { Stack, Box } from "@mui/material"
+import Progress from "../../../components/ui/Progress"
 import ProfileCard from "../../../components/ui/ProfileCard"
+import BackButton from "../../../components/ui/BackButton"
 import { getUserById } from "../api/search.api"
-import SnackBar from "../../../components/ui/SnackBar"
+import FailureFallback from "../../../components/ui/FailureFallback"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 const UserProfile = () => {
   const { id } = useParams()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [status, setStatus] = useState("")
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     const controller = new AbortController()
@@ -25,23 +25,19 @@ const UserProfile = () => {
 
         if (res.status === 200) {
           setUser(res?.data?.data || null)
+          setError("")
         }
-      } catch (error) {
+      } catch (err) {
         if (
-          error.name === "CanceledError" ||
-          error.name === "AbortError" ||
-          error.code === "ERR_CANCELED"
+          err.name === "CanceledError" ||
+          err.name === "AbortError" ||
+          err.code === "ERR_CANCELED"
         ) {
           return
         }
 
+        setError(getErrorMessage(err))
         console.error("search user error", error)
-        const errorMessage =
-          error.response?.data?.message || "Failed to load search user"
-
-        setIsOpen(true)
-        setMessage(errorMessage)
-        setStatus("error")
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)
@@ -54,32 +50,21 @@ const UserProfile = () => {
     return () => controller.abort()
   }, [id])
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "30vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    )
-  }
+  if (loading && !user) return <Progress />
+
+  if (error && !user) return <FailureFallback message={error} />
 
   return (
-    <Box sx={{ mt: { xs: 0.5, md: 1 } }}>
+    <Stack spacing={2} sx={{ mt: { xs: 1, sm: 1.5 } }}>
+      <Box
+        sx={{
+          alignSelf: "flex-start",
+        }}
+      >
+        <BackButton />
+      </Box>
       <ProfileCard user={user} />
-
-      <SnackBar
-        open={isOpen}
-        message={message}
-        handleClose={() => setIsOpen(false)}
-        status={status}
-      />
-    </Box>
+    </Stack>
   )
 }
 

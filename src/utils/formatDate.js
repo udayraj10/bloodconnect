@@ -1,9 +1,13 @@
-export  const formatDate = (dateString) => {
-  if (!dateString) return ""
-  const date = new Date(dateString)
+export const formatDate = (dateInput) => {
+  if (!dateInput) return ""
+
+  const date = new Date(dateInput)
+
+  if (isNaN(date.getTime())) return ""
+
   return date.toLocaleDateString("en-US", {
-    year: "numeric",
     month: "short",
     day: "numeric",
+    year: "numeric",
   })
 }

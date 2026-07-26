@@ -44,14 +44,9 @@ const SearchBar = ({ value, onChange, onClear }) => {
           },
         }}
         sx={{
-          width: {
-            xs: "100%",
-            md: "560px",
-            lg: "640px",
-            xl: "720px",
-          },
+          width: "100%",
           backgroundColor: "#fff",
-          maxWidth: "100%",
+          maxWidth: "40rem",
           transition: "box-shadow 0.2s ease",
           boxShadow: focused ? "0 0 0 2px rgba(25, 118, 210, 0.15)" : "none",
           borderRadius: 1,

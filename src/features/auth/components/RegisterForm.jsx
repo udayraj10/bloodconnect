@@ -76,18 +76,12 @@ const RegisterForm = ({ updateRegister }) => {
       onSubmit={handleSubmit(onRegister)}
       elevation={2}
       sx={{
-        width: {
-          xs: "90vw",
-          sm: "70vw",
-          md: "45vw",
-        },
-        height: {
-          xs: "95vh",
-          sm: "90vh",
-          md: "80vh",
-        },
+        width: "100%",
+        maxWidth: "28rem",
+        mx: 2,
         overflow: "auto",
       }}
+      s
     >
       <CardHeader
         title="Create Account"

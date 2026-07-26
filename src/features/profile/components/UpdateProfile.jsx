@@ -15,6 +15,7 @@ import { useAuth } from "../../../context/AuthContext"
 import { bloodGroupOptions } from "../../../utils/options"
 import { updateProfile, deactivate } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import { useSnackbar } from "../../../hooks/useSnackbar"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 
 const defaultValues = {
@@ -31,10 +32,8 @@ const defaultValues = {
 
 const UpdateProfile = ({ onEditClick }) => {
   const { user, refreshUser, logout } = useAuth()
-  const [status, setStatus] = useState("")
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { status, message, isOpen, showSnackbar, hideSnackbar } = useSnackbar()
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues,
@@ -65,20 +64,17 @@ const UpdateProfile = ({ onEditClick }) => {
   const onSubmit = async (data) => {
     setLoading(true)
     try {
-      setStatus("")
-
       const res = await updateProfile(data)
 
       if (res.status === 200) {
-        setIsOpen(true)
-        setMessage(res.data.message)
-        setStatus("success")
+        showSnackbar(
+          "success",
+          res.data.message || "Profile updated successully.",
+        )
         refreshUser()
       }
     } catch (error) {
-      console.error("update user", error)
       const responseData = error.response?.data
-
       let errorMessage = "Updation failed"
 
       if (responseData) {
@@ -89,9 +85,8 @@ const UpdateProfile = ({ onEditClick }) => {
         }
       }
 
-      setIsOpen(true)
-      setMessage(errorMessage)
-      setStatus("error")
+      showSnackbar("error", errorMessage)
+      console.error("update user", error)
     } finally {
       setLoading(false)
     }
@@ -99,23 +94,18 @@ const UpdateProfile = ({ onEditClick }) => {
 
   const onDelete = async () => {
     try {
-      setStatus("")
-
       const res = await deactivate()
 
       if (res.status === 200) {
-        setIsOpen(true)
-        setMessage(res.data.message)
-        setStatus("success")
+        showSnackbar("success", res.data.message || "Successfully deleted.")
         logout()
       }
     } catch (error) {
+      showSnackbar(
+        "error",
+        error.response?.data?.message || "Failed to delete.",
+      )
       console.error("deactivate user", error)
-      const errorMessage = error.response?.data?.message || "Failed to delete"
-
-      setIsOpen(true)
-      setMessage(errorMessage)
-      setStatus("error")
     }
   }
 
@@ -290,7 +280,7 @@ const UpdateProfile = ({ onEditClick }) => {
 
       <SnackBar
         open={isOpen}
-        handleClose={() => setIsOpen(false)}
+        handleClose={hideSnackbar}
         message={message}
         status={status}
       />

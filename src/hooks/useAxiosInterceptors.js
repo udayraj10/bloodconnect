@@ -1,16 +1,12 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import api from "../services/axios"
 
 export function useAxiosInterceptors() {
   const { logout } = useAuth()
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
-    if (api.interceptorsInitialized) {
-      return
-    }
-    api.interceptorsInitialized = true
-
     const requestInterceptor = api.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("token")
@@ -39,11 +35,15 @@ export function useAxiosInterceptors() {
       },
     )
 
+    setInitialized(true)
+
     return () => {
       api.interceptors.request.eject(requestInterceptor)
       api.interceptors.response.eject(responseInterceptor)
 
-      api.interceptorsInitialized = false
+      setInitialized(false)
     }
   }, [logout])
+
+  return initialized
 }

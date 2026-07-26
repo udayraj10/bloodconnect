@@ -1,5 +1,5 @@
-import { Routes, Route } from "react-router-dom"
-import HomePage from "../pages/HomePage"
+import { useEffect } from "react"
+import { Routes, Route, useLocation, matchPath } from "react-router-dom"
 import { AuthPage } from "../pages/AuthPage"
 import { OfferPage } from "../pages/OfferPage"
 import { OfferDetailsPage } from "../pages/OfferDetailsPage"
@@ -12,36 +12,61 @@ import { UserProfilePage } from "../pages/UserProfilePage"
 import NotFound from "../pages/NotFound"
 import AppLayout from "../components/layout/AppLayout"
 import ProtectedRoute from "../components/layout/ProtectedRoute"
+import HomePage from "../pages/HomePage"
+
+const titleConfig = [
+  { path: "/home", title: "Home" },
+  { path: "/", title: "Dashboard" },
+  { path: "/auth", title: "Authentication" },
+  { path: "/requests", title: "Requests" },
+  { path: "/requests/:id", title: "Requests Details" },
+  { path: "/offers", title: "Offers" },
+  { path: "/offers/:id", title: "Offers Details" },
+  { path: "/profile", title: "Profile" },
+  { path: "/search", title: "Search" },
+  { path: "/search/:id", title: "User Profile" },
+  { path: "/stats", title: "Stats" },
+  { path: "*", title: "Page Not Found" },
+]
+
+function PageTitleUpdater() {
+  const location = useLocation()
+
+  useEffect(() => {
+    const activeRoute = titleConfig.find((route) =>
+      matchPath({ path: route.path, end: true }, location.pathname),
+    )
+
+    const title = activeRoute?.title
+    document.title = title ? `${title} | Blood Connect` : "Blood Connect"
+  }, [location])
+
+  return null
+}
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/auth" element={<AuthPage />} />
+    <>
+      <PageTitleUpdater />
+      <Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="*" element={<NotFound />} />
 
-      <Route path="*" element={<NotFound />} />
-
-      <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<HomePage />} />
-
-          <Route path="/requests" element={<RequestPage />} />
-
-          <Route path="/requests/:id" element={<BloodRequestDetails />} />
-
-          <Route path="/offers" element={<OfferPage />} />
-
-          <Route path="/offers/:id" element={<OfferDetailsPage />} />
-
-          <Route path="/profile" element={<ProfilePage />} />
-
-          <Route path="/search" element={<SearchPage />} />
-
-          <Route path="/search/:id" element={<UserProfilePage />} />
-
-          <Route path="/stats" element={<StatsPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<StatsPage />} />
+            <Route path="/requests" element={<RequestPage />} />
+            <Route path="/requests/:id" element={<BloodRequestDetails />} />
+            <Route path="/offers" element={<OfferPage />} />
+            <Route path="/offers/:id" element={<OfferDetailsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/:id" element={<UserProfilePage />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

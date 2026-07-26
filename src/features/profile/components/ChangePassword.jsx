@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography"
 import FormTextField from "../../../components/ui/FormTextField"
 import { changePassword } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
+import { useSnackbar } from "../../../hooks/useSnackbar"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 
 const defaultValues = {
@@ -20,9 +21,7 @@ const defaultValues = {
 
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
-  const [status, setStatus] = useState("")
+  const { status, message, isOpen, showSnackbar, hideSnackbar } = useSnackbar()
 
   const {
     control,
@@ -40,23 +39,21 @@ const ChangePassword = () => {
   const onSubmit = async (data) => {
     setLoading(true)
     try {
-      setStatus("")
       const res = await changePassword(data)
 
       if (res.status === 200) {
         reset(defaultValues)
-        setIsOpen(true)
-        setMessage(res.data.message)
-        setStatus("success")
+        showSnackbar(
+          "success",
+          res.data.message || "Password changed successfully.",
+        )
       }
     } catch (error) {
+      showSnackbar(
+        "error",
+        error.response?.data?.message || "Failed to change password.",
+      )
       console.error("Password mismatch: ", error)
-
-      const errorMessage = error.response?.data?.message || "Password Mismatch"
-
-      setIsOpen(true)
-      setMessage(errorMessage)
-      setStatus("error")
     } finally {
       setLoading(false)
     }
@@ -127,7 +124,7 @@ const ChangePassword = () => {
 
       <SnackBar
         open={isOpen}
-        handleClose={() => setIsOpen(false)}
+        handleClose={hideSnackbar}
         message={message}
         status={status}
       />

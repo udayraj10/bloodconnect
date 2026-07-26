@@ -15,7 +15,7 @@ export const accountTypeOptions = [
 ]
 
 export const urgencyOptions = [
-  { label: "NORMAL", id: 1 },
-  { label: "URGENT", id: 2 },
-  { label: "CRITICAL", id: 3 },
+  { label: "Normal", id: 1 },
+  { label: "Urgent", id: 2 },
+  { label: "Critical", id: 3 },
 ]

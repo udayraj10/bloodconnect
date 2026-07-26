@@ -65,7 +65,6 @@ export const theme = createTheme({
     MuiButton: {
       defaultProps: {
         disableElevation: true,
-        disableRipple: true,
       },
 
       styleOverrides: {
@@ -74,7 +73,6 @@ export const theme = createTheme({
           fontWeight: 600,
 
           "&.Mui-disabled": {
-            backgroundColor: "#bbb",
             color: "#444",
           },
         },

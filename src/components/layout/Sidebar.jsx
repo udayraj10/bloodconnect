@@ -11,9 +11,10 @@ import HomeIcon from "@mui/icons-material/Home"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism"
 import RedeemIcon from "@mui/icons-material/Redeem"
-import WaterDropIcon from "@mui/icons-material/WaterDrop"
+import ManageSearchIcon from "@mui/icons-material/ManageSearch"
 import BarChartIcon from "@mui/icons-material/BarChart"
 import ListItemIcon from "@mui/material/ListItemIcon"
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import { useTheme } from "@mui/material/styles"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { useAuth } from "../../context/AuthContext"
@@ -21,12 +22,11 @@ import { useAuth } from "../../context/AuthContext"
 const drawerWidth = 240
 
 const menuItems = [
-  { text: "Dashboard", icon: <HomeIcon />, path: "/" },
+  { text: "Dashboard", icon: <BarChartIcon />, path: "/" },
   { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
   { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
-  { text: "Search", icon: <WaterDropIcon />, path: "/search" },
-  { text: "My Stats", icon: <BarChartIcon />, path: "/stats" },
+  { text: "Search", icon: <ManageSearchIcon />, path: "/search" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
@@ -37,6 +37,12 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"))
 
   const currentPath = location.pathname
+
+  const handleItemClick = () => {
+    if (!isDesktop) {
+      onToggle()
+    }
+  }
 
   return (
     <Drawer
@@ -58,7 +64,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
           flexDirection: "column",
           height: "100%",
           overflow: "hidden",
-          pt: { xs: 6, sm: 7 },
+          pt: 7.9,
         }}
       >
         <List>
@@ -78,6 +84,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
                   component={Link}
                   to={item.path}
                   selected={isSelected}
+                  onClick={handleItemClick}
                   sx={{
                     color: "text.primary",
 
@@ -99,7 +106,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
                     slotProps={{
                       primary: {
                         sx: {
-                          fontWeight: isSelected ? 500 : 300,
+                          fontWeight: isSelected ? 600 : 400,
                         },
                       },
                     }}
@@ -121,6 +128,7 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
             <Button
               onClick={logout}
               variant="outlined"
+              startIcon={<LogoutOutlinedIcon />}
               fullWidth
               sx={{ borderWidth: 2 }}
             >
