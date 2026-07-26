@@ -30,7 +30,7 @@ export const getOffersColumns = ({
     flex: 1,
     renderCell: (params) => (
       <CustomTooltip
-        title="Another donor fulfilled this request"
+        title="Another donor completed this request"
         disable={params.value?.toLowerCase() !== "closed"}
       >
         <Chip variant={offerStatusVariant(params.value)}>{params.value}</Chip>
