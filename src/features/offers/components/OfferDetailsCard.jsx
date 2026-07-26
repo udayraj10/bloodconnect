@@ -2,15 +2,15 @@ import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import CircularProgress from "@mui/material/CircularProgress"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
 import { completeOffer, getOffer } from "../api/offers.api"
 import SnackBar from "../../../components/ui/SnackBar"
 import Chip from "../../../components/ui/Chip"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
-import Divider from "@mui/material/Divider"
+import BackButton from "../../../components/ui/BackButton"
 import { useSnackbar } from "../../../hooks/useSnackbar"
 import { formatOfferData } from "../utils/formatOfferData"
 import { getErrorMessage } from "../../../utils/getErrorMessage"
@@ -77,7 +77,7 @@ const OfferDetailsCard = () => {
       }
     } catch (error) {
       showSnackbar(
-        "success",
+        "error",
         error.response?.data?.message || "Failed to complete offer",
       )
 
@@ -100,12 +100,22 @@ const OfferDetailsCard = () => {
       sx={{
         width: "100%",
         display: "flex",
+        flexDirection: { xs: "column", md: "row" },
         justifyContent: "center",
         mt: { xs: 1, sm: 2 },
         mb: 4,
         px: { xs: 1, sm: 2 },
+        gap: 2,
       }}
     >
+      <Box
+        sx={{
+          alignSelf: "flex-start",
+        }}
+      >
+        <BackButton />
+      </Box>
+
       <Box
         sx={{
           width: "100%",

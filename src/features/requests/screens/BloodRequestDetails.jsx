@@ -9,6 +9,7 @@ import TableBox from "../../../components/ui/TableBox"
 import Chip from "../../../components/ui/Chip"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
+import BackButton from "../../../components/ui/BackButton"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { getDonorColumns } from "../constants/tableColumns"
 import { formatRequestData } from "../utils/formatRequestData"
@@ -90,7 +91,14 @@ const BloodRequestDetails = () => {
   }
 
   return (
-    <Stack spacing={3} sx={{ mt: { xs: 1, sm: 2 }, mb: 4 }}>
+    <Stack spacing={2} sx={{ mt: { xs: 1, sm: 2 }, mb: 4 }}>
+      <Box
+        sx={{
+          alignSelf: "flex-start",
+        }}
+      >
+        <BackButton />
+      </Box>
       <Grid
         container
         spacing={2}

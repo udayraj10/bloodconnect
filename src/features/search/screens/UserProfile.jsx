@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Box } from "@mui/material"
+import { Stack, Box } from "@mui/material"
 import Progress from "../../../components/ui/Progress"
 import ProfileCard from "../../../components/ui/ProfileCard"
+import BackButton from "../../../components/ui/BackButton"
 import { getUserById } from "../api/search.api"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import { getErrorMessage } from "../../../utils/getErrorMessage"
@@ -54,9 +55,16 @@ const UserProfile = () => {
   if (error && !user) return <FailureFallback message={error} />
 
   return (
-    <Box sx={{ mt: { xs: 1, sm: 1.5 } }}>
+    <Stack spacing={2} sx={{ mt: { xs: 1, sm: 1.5 } }}>
+      <Box
+        sx={{
+          alignSelf: "flex-start",
+        }}
+      >
+        <BackButton />
+      </Box>
       <ProfileCard user={user} />
-    </Box>
+    </Stack>
   )
 }
 
