@@ -25,7 +25,7 @@ const LoginForm = ({ updateRegister }) => {
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
-      email: "gaurav.s@outlook.com",
+      email: "vikas.kumar@gmail.com",
       password: "000000",
     },
   })
