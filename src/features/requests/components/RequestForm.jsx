@@ -54,6 +54,8 @@ const RequestForm = ({ fetchRequests, paginationModel }) => {
           sx={{
             backgroundColor: "#fff",
             p: 2,
+            border: 1,
+            borderColor: "divider",
             borderRadius: 1,
           }}
         >
