@@ -1,8 +1,7 @@
+import { memo } from "react"
 import { Stack, Button } from "@mui/material"
 
 const ActionCell = ({ rowId, status, onCancel, onView, loadingRowId }) => {
-  const loading = rowId === loadingRowId
-
   const handleCancelClick = (e) => {
     e.stopPropagation()
     onCancel(rowId)
@@ -13,10 +12,8 @@ const ActionCell = ({ rowId, status, onCancel, onView, loadingRowId }) => {
     onView(rowId)
   }
 
-  const isCancelled = status?.toLowerCase() === "cancelled"
-  const isFulfilled = status?.toLowerCase() === "fulfilled"
-
-  const showCancelButton = !isCancelled && !isFulfilled
+  const isOpen = status?.toLowerCase() === "open"
+  const loading = rowId === loadingRowId
 
   return (
     <Stack
@@ -31,7 +28,7 @@ const ActionCell = ({ rowId, status, onCancel, onView, loadingRowId }) => {
         View
       </Button>
 
-      {showCancelButton && (
+      {isOpen && (
         <Button
           variant="outlined"
           loading={loading}
@@ -46,4 +43,4 @@ const ActionCell = ({ rowId, status, onCancel, onView, loadingRowId }) => {
   )
 }
 
-export default ActionCell
+export default memo(ActionCell)

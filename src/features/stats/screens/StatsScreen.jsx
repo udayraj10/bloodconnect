@@ -3,7 +3,7 @@ import { getStats } from "../api/stats.api"
 import FallbackFailure from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import Box from "@mui/material/Box"
-import StatsItem from "../components/StatsItem"
+import StatGrid from "../components/StatGrid"
 import Divider from "@mui/material/Divider"
 import Typography from "@mui/material/Typography"
 import Piechart from "../components/Piechart"
@@ -14,7 +14,7 @@ import {
   getOverview,
   getRequestDistribution,
 } from "../utils/formatStatsData"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 const StatsScreen = () => {
   const [stats, setStats] = useState(null)
@@ -27,21 +27,15 @@ const StatsScreen = () => {
     async function loadStats() {
       try {
         setLoading(true)
+        setError("")
 
         const res = await getStats(controller.signal)
 
         if (res.status === 200) {
           setStats(res?.data?.data ?? null)
-          setError("")
         }
       } catch (err) {
-        if (
-          err.name === "CanceledError" ||
-          err.name === "AbortError" ||
-          err.code === "ERR_CANCELED"
-        ) {
-          return
-        }
+        if (isAbortError(err)) return
 
         setError(getErrorMessage(err))
 
@@ -80,7 +74,7 @@ const StatsScreen = () => {
         My Donations
       </Typography>
 
-      <StatsItem data={donationData} />
+      <StatGrid data={donationData} />
 
       <Divider sx={{ my: 2 }} />
 
@@ -88,7 +82,7 @@ const StatsScreen = () => {
         My Requests
       </Typography>
 
-      <StatsItem data={requestData} />
+      <StatGrid data={requestData} />
 
       <Divider sx={{ my: 2 }} />
 

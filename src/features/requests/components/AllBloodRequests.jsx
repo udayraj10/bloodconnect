@@ -6,25 +6,22 @@ import Box from "@mui/material/Box"
 import Table from "../../../components/ui/Table"
 import TableBox from "../../../components/ui/TableBox"
 import { getRequestsColumns } from "../constants/tableColumns"
-import { useRequests } from "../hooks/useRequests"
 
-const AllBloodRequests = ({ data }) => {
-  const {
-    requestState,
-    rowCount,
-    paginationModel,
-    setPaginationModel,
-    loadingRowId,
-    onCancel,
-    onView,
-    toast,
-  } = data
-
+const AllBloodRequests = ({
+  requestState,
+  rowCount,
+  paginationModel,
+  setPaginationModel,
+  loadingRowId,
+  onCancel,
+  onView,
+  toast,
+}) => {
   const { requests, isLoading } = requestState
 
   const columns = useMemo(
     () => getRequestsColumns({ onCancel, onView, loadingRowId }),
-    [(onCancel, onView, loadingRowId)],
+    [onCancel, onView, loadingRowId],
   )
 
   return (

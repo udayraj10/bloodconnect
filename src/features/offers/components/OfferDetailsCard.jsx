@@ -13,7 +13,7 @@ import Progress from "../../../components/ui/Progress"
 import BackButton from "../../../components/ui/BackButton"
 import { useSnackbar } from "../../../hooks/useSnackbar"
 import { formatOfferData } from "../utils/formatOfferData"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 const OfferDetailsCard = () => {
   const { id } = useParams()
@@ -28,6 +28,7 @@ const OfferDetailsCard = () => {
   const fetchOffer = useCallback(
     async (signal) => {
       try {
+        setError("")
         const res = await getOffer(id, signal)
 
         if (res.status === 200) {
@@ -35,16 +36,9 @@ const OfferDetailsCard = () => {
             offer: res?.data?.data ?? [],
             isLoading: false,
           })
-          setError("")
         }
       } catch (err) {
-        if (
-          err.name === "CanceledError" ||
-          err.name === "AbortError" ||
-          err.code === "ERR_CANCELED"
-        ) {
-          return
-        }
+        if (isAbortError(err)) return
 
         setOfferState((prev) => ({ ...prev, isLoading: false }))
         setError(getErrorMessage(err))
@@ -68,9 +62,10 @@ const OfferDetailsCard = () => {
   }, [fetchOffer])
 
   const handleCompleteOffer = async () => {
-    setCompleting(true)
     try {
+      setCompleting(true)
       const res = await completeOffer(id)
+
       if (res.status === 200 || res.status === 201) {
         showSnackbar("success", res.data?.message || "Offer completed")
         await fetchOffer()
@@ -86,6 +81,7 @@ const OfferDetailsCard = () => {
       setCompleting(false)
     }
   }
+  
   const { offer, isLoading } = offerState
   const offerData = formatOfferData(offer)
 
@@ -133,12 +129,12 @@ const OfferDetailsCard = () => {
         <Divider />
 
         <Typography variant="h6" sx={{ px: 3, py: 2 }}>
-          {offerState.offer?.message || "No message available"}
+          {offer?.message || "No message available"}
         </Typography>
 
         <Grid container spacing={{ xs: 2, sm: 2.5 }} sx={{ px: 3, pb: 3 }}>
           {offerData.map((item) => (
-            <Grid item size={{ xs: 12, sm: 6 }} key={item.label}>
+            <Grid key={item.key} size={{ xs: 12, sm: 6 }}>
               <Box
                 sx={{
                   border: "1px solid",

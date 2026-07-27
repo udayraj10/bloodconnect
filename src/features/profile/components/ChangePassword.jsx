@@ -6,7 +6,6 @@ import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
-import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import FormTextField from "../../../components/ui/FormTextField"
 import { changePassword } from "../api/profile.api"
@@ -23,12 +22,7 @@ const ChangePassword = () => {
   const [loading, setLoading] = useState(false)
   const { status, message, isOpen, showSnackbar, hideSnackbar } = useSnackbar()
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues,
   })
 
@@ -37,8 +31,8 @@ const ChangePassword = () => {
   }, [reset])
 
   const onSubmit = async (data) => {
-    setLoading(true)
     try {
+      setLoading(true)
       const res = await changePassword(data)
 
       if (res.status === 200) {

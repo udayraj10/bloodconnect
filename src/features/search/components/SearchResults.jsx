@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Box, Stack, Typography, Pagination, Divider } from "@mui/material"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
 import { searchByUsername } from "../api/search.api"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
+
+const PAGE_SIZE = 5
 
 const SearchResults = ({ username }) => {
   const [users, setUsers] = useState([])
@@ -14,7 +16,6 @@ const SearchResults = ({ username }) => {
 
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
-  const pageSize = 5
 
   const navigate = useNavigate()
 
@@ -33,7 +34,7 @@ const SearchResults = ({ username }) => {
         const res = await searchByUsername(
           username,
           page - 1,
-          pageSize,
+          PAGE_SIZE,
           controller.signal,
         )
 
@@ -42,12 +43,7 @@ const SearchResults = ({ username }) => {
           setTotalPages(res?.data?.data?.totalPages ?? 0)
         }
       } catch (err) {
-        if (
-          ["CanceledError", "AbortError"].includes(err.name) ||
-          err.code === "ERR_CANCELED"
-        ) {
-          return
-        }
+        if (isAbortError(err)) return
 
         setError(getErrorMessage(err))
         setUsers([])
@@ -78,13 +74,13 @@ const SearchResults = ({ username }) => {
   const handleKeyDown = (event, id) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
-      navigate(`/search/${id}`)
+      handleUserClick(id)
     }
   }
 
   if (loading && username !== "") return <Progress />
 
-  if (username === "") return
+  if (!username) return null
 
   if (error && users.length === 0) return <FailureFallback message={error} />
 
@@ -102,8 +98,8 @@ const SearchResults = ({ username }) => {
           }}
         >
           <Stack divider={<Divider flexItem />}>
-            {users.map((user, index) => {
-              const userId = user.id ?? index
+            {users.map((user) => {
+              const userId = user.id
 
               return (
                 <Box

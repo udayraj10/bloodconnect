@@ -1,20 +1,16 @@
+import { memo } from "react"
 import { Button, Stack } from "@mui/material"
 
 const ActionCell = ({
-  row,
+  rowId,
+  status,
   onAccept,
   onDecline,
   onView,
   loadingRowId,
   loadingActionType,
 }) => {
-  const rowId = row?.id
-  const status = (row?.status ?? "").toLowerCase()
-  const isAcceptLoading =
-    loadingRowId === rowId && loadingActionType === "accept"
-  const isDeclineLoading =
-    loadingRowId === rowId && loadingActionType === "decline"
-  const isAnyRowLoading = loadingRowId !== null
+  const normalizedStatus = (status ?? "").toLowerCase()
 
   const handleAcceptClick = (event) => {
     event.stopPropagation()
@@ -31,15 +27,21 @@ const ActionCell = ({
     onView(rowId)
   }
 
-  if (status === "cancelled" || status === "closed") {
+  const isAcceptLoading =
+    loadingRowId === rowId && loadingActionType === "accept"
+  const isDeclineLoading =
+    loadingRowId === rowId && loadingActionType === "decline"
+  const isAnyRowLoading = loadingRowId !== null
+
+  if (normalizedStatus === "cancelled" || normalizedStatus === "closed") {
     return (
       <Button size="small" sx={{ textTransform: "capitalize" }} disabled>
-        {status}
+        {normalizedStatus}
       </Button>
     )
   }
 
-  if (status === "declined") {
+  if (normalizedStatus === "declined") {
     return (
       <Button size="small" disabled>
         Declined
@@ -47,7 +49,7 @@ const ActionCell = ({
     )
   }
 
-  if (status === "accepted" || status === "completed") {
+  if (normalizedStatus === "accepted" || normalizedStatus === "completed") {
     return (
       <Button
         variant="outlined"
@@ -92,4 +94,4 @@ const ActionCell = ({
   )
 }
 
-export default ActionCell
+export default memo(ActionCell)

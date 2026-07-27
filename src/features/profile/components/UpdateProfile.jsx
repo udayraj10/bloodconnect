@@ -8,6 +8,7 @@ import CardHeader from "@mui/material/CardHeader"
 import CardContent from "@mui/material/CardContent"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
 import FormAutocomplete from "../../../components/ui/FormAutocomplete"
 import FormTextField from "../../../components/ui/FormTextField"
 import FormCheckbox from "../../../components/ui/FormCheckbox"
@@ -16,54 +17,33 @@ import { bloodGroupOptions } from "../../../utils/options"
 import { updateProfile, deactivate } from "../api/profile.api"
 import SnackBar from "../../../components/ui/SnackBar"
 import { useSnackbar } from "../../../hooks/useSnackbar"
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
+import {
+  getProfileFormValues,
+  defaultProfileValues,
+} from "../utils/getFormValues"
 
-const defaultValues = {
-  fullName: "",
-  email: "",
-  age: "",
-  phone: "",
-  bloodGroup: "",
-  city: "",
-  address: "",
-  isAvailable: false,
-  lastDonationDate: "",
-}
-
-const UpdateProfile = ({ onEditClick }) => {
+const UpdateProfile = () => {
   const { user, refreshUser, logout } = useAuth()
   const [loading, setLoading] = useState(false)
   const { status, message, isOpen, showSnackbar, hideSnackbar } = useSnackbar()
 
   const { control, handleSubmit, reset } = useForm({
-    defaultValues,
+    defaultProfileValues,
   })
 
-  const resetValues = {
-    fullName: user?.fullName ?? "",
-    email: user?.email ?? "",
-    age: user?.age ?? "",
-    phone: user?.phone ?? "",
-    bloodGroup: user?.bloodGroup ?? "",
-    city: user?.city ?? "",
-    address: user?.address ?? "",
-    isAvailable: user?.isAvailable ?? false,
-    lastDonationDate: user?.lastDonationDate ?? "",
-  }
-
   const onCancel = () => {
-    reset(resetValues)
+    reset(getProfileFormValues(user))
   }
 
   useEffect(() => {
     if (user) {
-      reset(resetValues)
+      reset(getProfileFormValues(user))
     }
   }, [user, reset])
 
   const onSubmit = async (data) => {
-    setLoading(true)
     try {
+      setLoading(true)
       const res = await updateProfile(data)
 
       if (res.status === 200) {
@@ -71,7 +51,7 @@ const UpdateProfile = ({ onEditClick }) => {
           "success",
           res.data.message || "Profile updated successully.",
         )
-        refreshUser()
+        await refreshUser()
       }
     } catch (error) {
       const responseData = error.response?.data

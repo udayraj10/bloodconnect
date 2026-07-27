@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { getOffers, acceptOffer, declineOffer } from "../api/offers.api"
 import { useSnackbar } from "../../../hooks/useSnackbar"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 export const useOffers = () => {
   const navigate = useNavigate()
@@ -30,6 +30,7 @@ export const useOffers = () => {
 
   const fetchOffers = useCallback(async (page, pageSize, signal) => {
     try {
+      setError("")
       const res = await getOffers(page, pageSize, signal)
 
       if (res.status === 200) {
@@ -39,15 +40,9 @@ export const useOffers = () => {
         })
 
         setRowCount(res.data?.data?.totalElements ?? 0)
-        setError("")
       }
     } catch (err) {
-      if (
-        ["CanceledError", "AbortError"].includes(err.name) ||
-        err.code === "ERR_CANCELED"
-      ) {
-        return
-      }
+      if (isAbortError(err)) return
 
       setDataState((prev) => ({ ...prev, isLoading: false }))
 
@@ -64,18 +59,15 @@ export const useOffers = () => {
   useEffect(() => {
     const controller = new AbortController()
 
-    const loadData = async () => {
-      setDataState((prev) => ({ ...prev, isLoading: true }))
-      setError("")
+    setDataState((prev) => ({ ...prev, isLoading: true }))
+    setError("")
 
-      await fetchOffers(
-        paginationModel.page,
-        paginationModel.pageSize,
-        controller.signal,
-      )
-    }
+    fetchOffers(
+      paginationModel.page,
+      paginationModel.pageSize,
+      controller.signal,
+    )
 
-    loadData()
     return () => controller.abort()
   }, [paginationModel.page, paginationModel.pageSize, fetchOffers])
 
@@ -105,25 +97,35 @@ export const useOffers = () => {
     }
   }
 
-  const onAccept = (id) =>
-    handleAction(
-      id,
-      "accept",
-      acceptOffer,
-      "Offer accepted successfully",
-      "Failed to accept",
-    )
+  const onAccept = useCallback(
+    (id) =>
+      handleAction(
+        id,
+        "accept",
+        acceptOffer,
+        "Offer accepted successfully",
+        "Failed to accept",
+      ),
+    [handleAction],
+  )
 
-  const onDecline = (id) =>
-    handleAction(
-      id,
-      "decline",
-      declineOffer,
-      "Offer declined successfully",
-      "Failed to decline",
-    )
-
-  const onView = (id) => navigate(`/offers/${id}`)
+  const onDecline = useCallback(
+    (id) =>
+      handleAction(
+        id,
+        "decline",
+        declineOffer,
+        "Offer declined successfully",
+        "Failed to decline",
+      ),
+    [handleAction],
+  )
+  const onView = useCallback(
+    (id) => {
+      navigate(`/offers/${id}`)
+    },
+    [navigate],
+  )
 
   return {
     dataState,

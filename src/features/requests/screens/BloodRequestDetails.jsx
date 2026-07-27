@@ -13,7 +13,7 @@ import BackButton from "../../../components/ui/BackButton"
 import { getDonors, getBloodRequest } from "../api/request.api"
 import { getDonorColumns } from "../constants/tableColumns"
 import { formatRequestData } from "../utils/formatRequestData"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 const BloodRequestDetails = () => {
   const { id } = useParams()
@@ -37,6 +37,7 @@ const BloodRequestDetails = () => {
     async function loadRequestDetails() {
       try {
         setRequestDetailsState((prev) => ({ ...prev, isLoading: true }))
+        setError("")
 
         const [requestRes, donorsRes] = await Promise.all([
           getBloodRequest(id, controller.signal),
@@ -55,15 +56,9 @@ const BloodRequestDetails = () => {
             isLoading: false,
           })
           setRowCount(donorsRes?.data?.data?.totalElements ?? 0)
-          setError("")
         }
       } catch (err) {
-        if (
-          ["CanceledError", "AbortError"].includes(err.name) ||
-          err.code === "ERR_CANCELED"
-        ) {
-          return
-        }
+        if (isAbortError(err)) return
 
         setRequestDetailsState((prev) => ({ ...prev, isLoading: false }))
 
@@ -82,9 +77,7 @@ const BloodRequestDetails = () => {
   const columns = useMemo(() => getDonorColumns(), [])
   const requestData = formatRequestData(request)
 
-  if (isLoading && !request && donors.length === 0) {
-    return <Progress />
-  }
+  if (isLoading && !request && donors.length === 0) return <Progress />
 
   if (error && !request && donors.length === 0) {
     return <FailureFallback message={error} />
@@ -116,8 +109,8 @@ const BloodRequestDetails = () => {
           </Typography>
         </Grid>
 
-        {requestData.map((item, index) => (
-          <Grid key={index} size={{ xs: 6, sm: 4 }}>
+        {requestData.map((item) => (
+          <Grid key={item.key} size={{ xs: 6, sm: 4 }}>
             <Box>
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {item.label}

@@ -10,7 +10,7 @@ import { getOffersColumns } from "../constants/tableColumns"
 
 const OffersTable = () => {
   const {
-    dataState,
+    dataState: { offers, isLoading },
     error,
     rowCount,
     paginationModel,
@@ -22,8 +22,6 @@ const OffersTable = () => {
     onDecline,
     onView,
   } = useOffers()
-
-  const { offers, isLoading } = dataState
 
   const columns = useMemo(
     () =>

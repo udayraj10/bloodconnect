@@ -6,7 +6,7 @@ import ProfileCard from "../../../components/ui/ProfileCard"
 import BackButton from "../../../components/ui/BackButton"
 import { getUserById } from "../api/search.api"
 import FailureFallback from "../../../components/ui/FailureFallback"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 const UserProfile = () => {
   const { id } = useParams()
@@ -20,24 +20,18 @@ const UserProfile = () => {
     async function loadUser() {
       try {
         setLoading(true)
+        setError("")
 
         const res = await getUserById(id, controller.signal)
 
         if (res.status === 200) {
           setUser(res?.data?.data || null)
-          setError("")
         }
       } catch (err) {
-        if (
-          err.name === "CanceledError" ||
-          err.name === "AbortError" ||
-          err.code === "ERR_CANCELED"
-        ) {
-          return
-        }
+        if (isAbortError(err)) return
 
         setError(getErrorMessage(err))
-        console.error("search user error", error)
+        console.error("search user error", err)
       } finally {
         if (!controller.signal?.aborted) {
           setLoading(false)

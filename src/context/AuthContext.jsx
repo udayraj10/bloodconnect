@@ -4,10 +4,10 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react"
 import { getProfile } from "../features/profile/api/profile.api"
 import { getErrorMessage } from "../utils/getErrorMessage"
-import { set } from "react-hook-form"
 
 const AuthContext = createContext(null)
 
@@ -25,9 +25,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token")
   }, [])
 
+  const fetchProfile = useCallback(async (authToken) => {
+    const res = await getProfile(authToken)
+
+    if (res.status === 200) setUser(res.data?.data ?? null)
+  }, [])
+
   useEffect(() => {
     async function initialize() {
       setLoading(true)
+      setError("")
       const storedToken = localStorage.getItem("token")
 
       if (!storedToken) {
@@ -40,31 +47,28 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken)
 
       try {
-        const res = await getProfile(storedToken)
-        if (res.status === 200) setUser(res.data?.data ?? null)
-        setError("")
+        await fetchProfile(storedToken)
       } catch (err) {
         setError(getErrorMessage(err))
-        console.error("Profile fetch failed during initialization:", error)
+        console.error("Profile fetch failed during initialization:", err)
       } finally {
         setLoading(false)
       }
     }
 
     initialize()
-  }, [logout])
+  }, [fetchProfile])
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     const currentToken = token || localStorage.getItem("token")
     if (!currentToken) return
 
     try {
-      const res = await getProfile(currentToken)
-      if (res.status === 200) setUser(res.data?.data ?? null)
+      await fetchProfile(currentToken)
     } catch (e) {
       console.error("Failed to refresh user profile:", e)
     }
-  }
+  }, [token, fetchProfile])
 
   const login = async (newToken) => {
     if (!newToken) return
@@ -72,26 +76,28 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", newToken)
 
     try {
-      const res = await getProfile(newToken)
-      if (res.status === 200) setUser(res.data?.data ?? null)
+      await fetchProfile(newToken)
     } catch (error) {
       console.error("login profile fetch failed:", error)
       logout()
     }
   }
 
-  const values = {
-    user,
-    token,
-    login,
-    logout,
-    isAuthenticated: !!token,
-    refreshUser,
-    loading,
-    error,
-  }
+  const value = useMemo(
+    () => ({
+      user,
+      token,
+      login,
+      logout,
+      isAuthenticated: !!token,
+      refreshUser,
+      loading,
+      error,
+    }),
+    [user, token, login, logout, refreshUser, loading, error],
+  )
 
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

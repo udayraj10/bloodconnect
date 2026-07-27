@@ -4,12 +4,10 @@ import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
 import Stack from "@mui/material/Stack"
-import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import CardHeader from "@mui/material/CardHeader"
 import Divider from "@mui/material/Divider"
-import Box from "@mui/material/Box"
 import AuthToggle from "./AuthToggle"
 import { useForm } from "react-hook-form"
 import FormTextField from "../../../components/ui/FormTextField"
@@ -31,8 +29,8 @@ const LoginForm = ({ updateRegister }) => {
   })
 
   const onLogin = async (data) => {
-    setLoading(true)
     try {
+      setLoading(true)
       setError("")
 
       const res = await loginApi(data)

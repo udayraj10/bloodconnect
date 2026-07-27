@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box"
 import UpdateProfile from "../components/UpdateProfile"
-import { Typography } from "@mui/material"
 import ProfileCard from "../../../components/ui/ProfileCard"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"

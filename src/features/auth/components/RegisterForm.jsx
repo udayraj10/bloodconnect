@@ -41,8 +41,8 @@ const RegisterForm = ({ updateRegister }) => {
   })
 
   const onRegister = async (data) => {
-    setLoading(true)
     try {
+      setLoading(true)
       setError("")
 
       const res = await registerApi(data)

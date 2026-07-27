@@ -7,8 +7,8 @@ import Progress from "../../../components/ui/Progress"
 import { useRequests } from "../hooks/useRequests"
 
 const RequestScreen = () => {
-  const requestsData = useRequests()
-  const { fetchRequests, requestState, error, paginationModel } = requestsData
+  const requestData = useRequests()
+  const { fetchRequests, requestState, error, paginationModel } = requestData
   const { requests, isLoading } = requestState
 
   if (isLoading && requests.length === 0) return <Progress />
@@ -25,7 +25,7 @@ const RequestScreen = () => {
       {error ? (
         <FailureFallback message={error} />
       ) : (
-        <AllBloodRequests data={requestsData} />
+        <AllBloodRequests {...requestData} />
       )}
     </Box>
   )

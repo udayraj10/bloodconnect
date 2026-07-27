@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
 import SearchBar from "../components/SearchBar"
 import { Divider } from "@mui/material"
 import SearchResults from "../components/SearchResults"

@@ -52,7 +52,8 @@ export const getOffersColumns = ({
     filterable: false,
     renderCell: (params) => (
       <ActionCell
-        row={params.row}
+        rowId={params.row?.id}
+        status={params.row?.status}
         onAccept={onAccept}
         onDecline={onDecline}
         onView={onView}

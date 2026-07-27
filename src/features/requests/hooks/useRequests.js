@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { cancelRequest } from "../api/request.api"
 import { useSnackbar } from "../../../hooks/useSnackbar"
 import { getBloodRequests } from "../api/request.api"
-import { getErrorMessage } from "../../../utils/getErrorMessage"
+import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 export const useRequests = () => {
   const navigate = useNavigate()
@@ -30,6 +30,7 @@ export const useRequests = () => {
 
   const fetchRequests = useCallback(async (page, pageSize, signal) => {
     try {
+      setError("")
       const res = await getBloodRequests(page, pageSize, signal)
 
       if (res.status === 200) {
@@ -39,15 +40,9 @@ export const useRequests = () => {
         })
 
         setRowCount(res.data?.data?.totalElements ?? 0)
-        setError("")
       }
     } catch (err) {
-      if (
-        ["CanceledError", "AbortError"].includes(err.name) ||
-        err.code === "ERR_CANCELED"
-      ) {
-        return
-      }
+      if (isAbortError(err)) return
 
       setRequestState((prev) => ({ ...prev, isLoading: false }))
 
@@ -57,25 +52,24 @@ export const useRequests = () => {
         },
       })
       setError(errMsg)
-      console.error("Request table error", error)
+      console.error("Request table error", err)
     }
   }, [])
 
   useEffect(() => {
     const controller = new AbortController()
 
-    const loadRequests = async () => {
-      setRequestState((prev) => ({ ...prev, isLoading: true }))
-      setError("")
+    setRequestState((prev) => ({
+      ...prev,
+      isLoading: true,
+    }))
 
-      await fetchRequests(
-        paginationModel.page,
-        paginationModel.pageSize,
-        controller.signal,
-      )
-    }
+    fetchRequests(
+      paginationModel.page,
+      paginationModel.pageSize,
+      controller.signal,
+    )
 
-    loadRequests()
     return () => controller.abort()
   }, [paginationModel.page, paginationModel.pageSize, fetchRequests])
 
