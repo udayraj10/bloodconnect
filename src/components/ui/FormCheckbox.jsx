@@ -1,4 +1,3 @@
-import React from "react"
 import { Controller } from "react-hook-form"
 import { FormControl, FormControlLabel, Checkbox } from "@mui/material"
 
