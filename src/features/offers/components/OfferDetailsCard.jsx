@@ -104,7 +104,6 @@ const OfferDetailsCard = () => {
         justifyContent: "center",
         mt: { xs: 1, sm: 2 },
         mb: 4,
-        px: { xs: 1, sm: 2 },
         gap: 2,
       }}
     >
