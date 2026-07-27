@@ -1,6 +1,6 @@
 import { styled } from "@mui/material/styles"
 
-const ChipRoot = styled("span")(({ theme, variant, size }) => ({
+const ChipRoot = styled("span")(({ variant }) => ({
   display: "inline-flex",
   alignItems: "center",
   borderWidth: "2px",
@@ -55,7 +55,7 @@ const ChipRoot = styled("span")(({ theme, variant, size }) => ({
   }),
 }))
 
-const Chip = ({ children, variant = "error" }) => {
+const Chip = ({ children, variant = "info" }) => {
   return <ChipRoot variant={variant}>{children}</ChipRoot>
 }
 
