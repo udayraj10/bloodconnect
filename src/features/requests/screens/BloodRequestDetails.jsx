@@ -117,7 +117,7 @@ const BloodRequestDetails = () => {
         </Grid>
 
         {requestData.map((item, index) => (
-          <Grid key={index} size={{ xs: 6, sm: 3 }}>
+          <Grid key={index} size={{ xs: 6, sm: 4 }}>
             <Box>
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {item.label}

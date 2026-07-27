@@ -18,5 +18,4 @@ export const formatRequestData = (request) => [
     variant: requestStatusVariant(request?.status || "-"),
   },
   { label: "Message", value: request?.message || "-" },
-  { label: "Requested on", value: formatDate(request?.createdAt || "-") },
 ]

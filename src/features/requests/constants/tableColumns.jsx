@@ -28,9 +28,15 @@ export const getDonorColumns = () => [
   },
   {
     field: "offeredAt",
-    headerName: "Offered At",
-    minWidth: 150,
+    headerName: "Offered",
+    minWidth: 140,
     flex: 1,
+    valueFormatter: (value) => (value ? formatDate(value) : ""),
+  },
+  {
+    field: "respondedAt",
+    headerName: "Responded",
+    minWidth: 140,
     valueFormatter: (value) => (value ? formatDate(value) : ""),
   },
 ]
