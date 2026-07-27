@@ -13,12 +13,12 @@ export const formatOfferData = (offer) => [
     component: "chip",
     variant: urgencyVariant(offer?.urgencyLevel || "-"),
   },
-  { label: "Offered at", value: formatDate(offer?.offeredAt) },
+  { label: "Offered", value: formatDate(offer?.offeredAt) },
   {
     label: "Status",
     value: offer?.status || "—",
     component: "chip",
     variant: offerStatusVariant(offer?.status || "-"),
   },
-  { label: "Responded at", value: formatDate(offer?.respondedAt) },
+  { label: "Responded", value: formatDate(offer?.respondedAt) },
 ]

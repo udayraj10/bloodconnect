@@ -39,7 +39,7 @@ export const getOffersColumns = ({
   },
   {
     field: "offeredAt",
-    headerName: "Offered on",
+    headerName: "Offered",
     width: 150,
     valueFormatter: (value) => (value ? formatDate(value) : ""),
   },
