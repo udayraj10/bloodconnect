@@ -37,8 +37,8 @@ const AuthScreen = () => {
         sx={{
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
           flexGrow: 1,
+          mx: 2,
         }}
       >
         <Typography variant="body2" color="error" sx={{ fontWeight: 500 }}>

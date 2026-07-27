@@ -61,7 +61,6 @@ const LoginForm = ({ updateRegister }) => {
       sx={{
         width: "100%",
         maxWidth: "28rem",
-        mx: 2,
       }}
     >
       <CardHeader
