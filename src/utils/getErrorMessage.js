@@ -19,3 +19,8 @@ export const getErrorMessage = (error, options = {}) => {
 
   return "An unexpected error occurred. Please refresh the page."
 }
+
+export const isAbortError = (error) =>
+  error.name === "CanceledError" ||
+  error.name === "AbortError" ||
+  error.code === "ERR_CANCELED"
