@@ -4,7 +4,7 @@ import { qrcode } from "vite-plugin-qrcode"
 
 export default defineConfig({
   plugins: [react(), qrcode()],
-  base: "https://github.com/udayraj10/bloodconnect",
+  base: "/bloodconnect/",
   build: {
     minify: "terser",
     terserOptions: {
