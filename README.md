@@ -2,7 +2,7 @@
 
 Blood Connect is a full-stack blood donation management platform built with a React frontend and a Spring Boot backend. The application matches blood requests with available donor offers, manages the request-to-donation lifecycle, and provides real-time activity metrics through a dedicated dashboard.
 
-[**Live Demo**](https://your-demo-link.com) | [**Live Backend**](https://blood-connect-api-dvlk.onrender.com/)
+[**Live Demo**](https://bloodconnect-platform.vercel.app/auth) | [**Live Backend**](https://blood-connect-api-dvlk.onrender.com/)
 
 ---
 
