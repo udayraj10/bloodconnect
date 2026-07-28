@@ -1,8 +1,9 @@
 import Box from "@mui/material/Box"
+import Container from "@mui/material/Container"
+import Stack from "@mui/material/Stack"
 import Navbar from "./Navbar"
 import Sidebar from "./Sidebar"
 import { useState } from "react"
-import { Stack } from "@mui/material"
 import { Outlet } from "react-router-dom"
 import Footer from "./Footer"
 
@@ -18,7 +19,9 @@ const AppLayout = () => {
       <Navbar isMobileOpen={isMobileOpen} onMenuClick={handleDrawerToggle} />
       <Stack direction="row" sx={{ flexGrow: 1 }}>
         <Sidebar isMobileOpen={isMobileOpen} onToggle={handleDrawerToggle} />
-        <Box
+        <Container
+          maxWidth="lg"
+          disableGutters
           component="main"
           sx={{
             flexGrow: 1,
@@ -29,12 +32,12 @@ const AppLayout = () => {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ flexGrow: 1 }}>
+          <Box fixed sx={{ flexGrow: 1 }}>
             <Outlet />
           </Box>
 
           <Footer />
-        </Box>
+        </Container>
       </Stack>
     </Stack>
   )
