@@ -24,7 +24,7 @@ const SearchBar = ({ value, onChange, onClear }) => {
         onChange={onChange}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        placeholder="Search users..."
+        placeholder="e.g., O+, Bengaluru, Meena"
         fullWidth
         slotProps={{
           input: {
