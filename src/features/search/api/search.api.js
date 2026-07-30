@@ -1,8 +1,9 @@
 import api from "../../../services/axios"
 
-export const searchByUsername = (username, page, size, signal) => {
-  return api.get(`/users/search?name=${username}`, {
+export const searchByQuery = (query, page, size, signal) => {
+  return api.get("/users/search", {
     params: {
+      query,
       page,
       size,
     },
