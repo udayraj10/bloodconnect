@@ -5,23 +5,23 @@ import { Divider } from "@mui/material"
 import SearchResults from "../components/SearchResults"
 
 const SearchScreen = () => {
-  const [username, setUsername] = useState("")
+  const [query, setQuery] = useState("")
 
   const onClear = () => {
-    setUsername("")
+    setQuery("")
   }
 
   return (
     <Box sx={{ mt: { xs: 1, sm: 1.5 } }}>
       <SearchBar
-        value={username}
-        onChange={(event) => setUsername(event.target.value)}
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
         onClear={onClear}
       />
 
       <Divider sx={{ my: 2 }} />
 
-      <SearchResults username={username} />
+      <SearchResults query={query} />
     </Box>
   )
 }
