@@ -8,7 +8,7 @@ Blood Connect is a full-stack blood donation management platform built with a Re
 
 ## 1. Project Screenshots & Media
 
-|                **Dashboard & Stats**                |                        **Requests**                        |
+|                **Dashboard & Stats**                |                       **Requests**                       |
 | :-------------------------------------------------: | :------------------------------------------------------: |
 | ![Dashboard Screenshot](./src/assets/dashboard.png) | ![Matching Engine Screenshot](./src/assets/requests.png) |
 
