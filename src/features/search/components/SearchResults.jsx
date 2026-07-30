@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { Box, Stack, Typography, Pagination, Divider } from "@mui/material"
 import FailureFallback from "../../../components/ui/FailureFallback"
 import Progress from "../../../components/ui/Progress"
-import { searchByUsername } from "../api/search.api"
+import { searchByQuery } from "../api/search.api"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
 import { getErrorMessage, isAbortError } from "../../../utils/getErrorMessage"
 
 const PAGE_SIZE = 5
 
-const SearchResults = ({ username }) => {
+const SearchResults = ({ query }) => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -21,7 +21,7 @@ const SearchResults = ({ username }) => {
 
   useEffect(() => {
     setPage(1)
-  }, [username])
+  }, [query])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -31,8 +31,8 @@ const SearchResults = ({ username }) => {
         setLoading(true)
         setError("")
 
-        const res = await searchByUsername(
-          username,
+        const res = await searchByQuery(
+          query,
           page - 1,
           PAGE_SIZE,
           controller.signal,
@@ -56,12 +56,12 @@ const SearchResults = ({ username }) => {
       }
     }
 
-    if (username) {
+    if (query) {
       loadUser()
     }
 
     return () => controller.abort()
-  }, [username, page])
+  }, [query, page])
 
   const handlePageChange = (_, value) => {
     setPage(value)
@@ -78,9 +78,9 @@ const SearchResults = ({ username }) => {
     }
   }
 
-  if (loading && username !== "") return <Progress />
+  if (loading && query !== "") return <Progress />
 
-  if (!username) return null
+  if (!query) return null
 
   if (error && users.length === 0) return <FailureFallback message={error} />
 
