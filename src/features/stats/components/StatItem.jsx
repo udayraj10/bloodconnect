@@ -1,7 +1,9 @@
+import Box from "@mui/material/Box"
 import Paper from "@mui/material/Paper"
+import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 
-const StatItem = ({ label, value, description }) => {
+const StatItem = ({ label, value, description, icon }) => {
   return (
     <Paper
       variant="outlined"
@@ -15,27 +17,33 @@ const StatItem = ({ label, value, description }) => {
         gap: 1,
       }}
     >
-      <Typography
-        variant="h5"
-        color="primary"
-        fontWeight={700}
-        sx={{ fontSize: { xs: 24, sm: 26 } }}
-      >
-        {value}
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 16 } }}
-      >
-        {label}
-      </Typography>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ display: { xs: "none", md: "block" } }}
-      >
-        {description}
-      </Typography>
+      <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start" }}>
+        <Box sx={{ fontSize: 20, color: "primary.dark", pt: 0.7 }}>{icon}</Box>
+
+        <Stack direction="column" spacing={0.5}>
+          <Typography
+            variant="h5"
+            color="primary"
+            fontWeight={700}
+            sx={{ fontSize: { xs: 24, sm: 26 } }}
+          >
+            {value}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 16 } }}
+          >
+            {label}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ display: { xs: "none", md: "block" } }}
+          >
+            {description}
+          </Typography>
+        </Stack>
+      </Stack>
     </Paper>
   )
 }

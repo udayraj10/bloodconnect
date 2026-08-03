@@ -10,6 +10,7 @@ const StatGrid = ({ data }) => {
             label={item.label}
             value={item.value}
             description={item.description}
+            icon={item.icon}
           />
         </Grid>
       ))}
