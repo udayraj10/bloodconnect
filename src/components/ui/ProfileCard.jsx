@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box"
+import Stack from "@mui/material/Stack"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
@@ -6,22 +7,43 @@ import Chip from "./Chip"
 import Typography from "@mui/material/Typography"
 import { formatDate } from "../../utils/formatDate"
 import { accountVariant } from "../../utils/chipUtils"
+import {
+  Bloodtype,
+  Location,
+  Calendar,
+  UserCheck,
+  Clock,
+  Phone,
+} from "../../utils/icons"
 
 const ProfileCard = ({ user }) => {
   const isAvailable = user?.isAvailable || false
 
   const displayData = [
-    { label: "Age", value: user?.age || "-" },
-    { label: "Phone", value: user?.phone || "-" },
-    { label: "Blood Group", value: user?.bloodGroup || "-" },
-    { label: "City", value: user?.city || "-" },
+    { label: "Age", value: user?.age || "-", icon: <Calendar /> },
+    {
+      label: "Phone",
+      value: user?.phone || "-",
+      icon: <Phone />,
+    },
+    {
+      label: "Blood Group",
+      value: user?.bloodGroup || "-",
+      icon: <Bloodtype />,
+    },
+    { label: "City", value: user?.city || "-", icon: <Location /> },
     {
       label: "Account Type",
       value: user?.accountType || "-",
       component: "chip",
       variant: accountVariant(user?.accountType || "-"),
+      icon: <UserCheck />,
     },
-    { label: "Member since", value: formatDate(user?.createdAt || "-") },
+    {
+      label: "Member since",
+      value: formatDate(user?.createdAt || "-"),
+      icon: <Clock />,
+    },
   ]
 
   return (
@@ -68,25 +90,37 @@ const ProfileCard = ({ user }) => {
                 pt: 2,
               }}
             >
-              <Typography
-                variant="caption"
-                sx={{
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                  fontWeight: 700,
-                }}
+              <Stack
+                direction="row"
+                spacing={1.5}
+                sx={{ alignItems: "flex-start" }}
               >
-                {item.label}
-              </Typography>
-              {item.component === "chip" ? (
-                <Box>
-                  <Chip variant={item.variant}>{item.value}</Chip>
+                <Box sx={{ fontSize: 20, color: "primary.dark" }}>
+                  {item.icon}
                 </Box>
-              ) : (
-                <Typography variant="body1" sx={{ mt: 0.5 }}>
-                  {item.value}
-                </Typography>
-              )}
+
+                <Stack direction="column" spacing={0.5}>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                  {item.component === "chip" ? (
+                    <Box>
+                      <Chip variant={item.variant}>{item.value}</Chip>
+                    </Box>
+                  ) : (
+                    <Typography variant="body1" sx={{ mt: 0.5 }}>
+                      {item.value}
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
             </Box>
           ))}
         </Box>
