@@ -62,7 +62,7 @@ const LoginForm = ({ updateRegister }) => {
       }}
     >
       <CardHeader
-        title="Sign in"
+        title="Login"
         subheader="Enter your credentials to continue"
         sx={{
           backgroundColor: "primary.main",
