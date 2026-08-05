@@ -5,11 +5,18 @@ export {
   Cancel,
   Assignment,
   Verified,
+  AccountCircle,
+  VolunteerActivism,
+  Redeem,
+  ManageSearch,
+  BarChart,
+  LogoutOutlined as Logout,
 } from "@mui/icons-material"
 
 export {
   MdOutlineLocationOn as Location,
   MdOutlineReport as Report,
+  MdOutlinePerson as Person,
 } from "react-icons/md"
 
 export {
@@ -23,6 +30,6 @@ export {
 export {
   FaHandHoldingHeart as Heart,
   FaRegThumbsUp as ThumbsUp,
-  FaHashtag as Tag,
+  FaRegIdCard as Tag,
   FaInfoCircle as Info,
 } from "react-icons/fa"
