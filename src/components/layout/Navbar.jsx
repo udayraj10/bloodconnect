@@ -1,15 +1,7 @@
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  Typography,
-  IconButton,
-  Avatar,
-} from "@mui/material"
+import { AppBar, Toolbar, Box, Typography, IconButton } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { TbMenu } from "react-icons/tb"
 import WaterDropIcon from "@mui/icons-material/WaterDrop"
-import PersonIcon from "@mui/icons-material/Person"
 import ClearIcon from "@mui/icons-material/Clear"
 import { useAuth } from "../../context/AuthContext"
 
@@ -119,24 +111,13 @@ export default function Navbar({ isMobileOpen, onMenuClick }) {
               gap: 1,
             }}
           >
-            <Avatar
-              sx={{
-                bgcolor: "primary.light",
-                color: "primary.main",
-                width: 42,
-                height: 42,
-              }}
-            >
-              <PersonIcon />
-            </Avatar>
-
             <Box>
               <Typography
                 variant="body2"
                 fontWeight={500}
                 sx={{ color: "text.primary" }}
               >
-                {user?.fullName || "Username"}
+                Hi, {user?.fullName || "Username"}
               </Typography>
 
               <Typography
