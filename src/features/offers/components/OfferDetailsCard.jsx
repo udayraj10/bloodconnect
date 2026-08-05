@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import Box from "@mui/material/Box"
+import Stack from "@mui/material/Stack"
 import Button from "@mui/material/Button"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
@@ -81,7 +82,7 @@ const OfferDetailsCard = () => {
       setCompleting(false)
     }
   }
-  
+
   const { offer, isLoading } = offerState
   const offerData = formatOfferData(offer)
 
@@ -146,18 +147,35 @@ const OfferDetailsCard = () => {
                   gap: 1,
                 }}
               >
-                <Typography variant="caption" color="text.secondary">
-                  {item.label}
-                </Typography>
-                {item.component === "chip" ? (
-                  <Box>
-                    <Chip variant={item.variant}>{item.value}</Chip>
+                <Stack
+                  direction="row"
+                  spacing={1.5}
+                  sx={{ alignItems: "flex-start" }}
+                >
+                  <Box
+                    sx={{
+                      fontSize: 20,
+                      color: "primary.dark",
+                      pt: 0.6,
+                    }}
+                  >
+                    {item.icon}
                   </Box>
-                ) : (
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                    {item.value}
-                  </Typography>
-                )}
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {item.label}
+                    </Typography>
+                    {item.component === "chip" ? (
+                      <Box>
+                        <Chip variant={item.variant}>{item.value}</Chip>
+                      </Box>
+                    ) : (
+                      <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                        {item.value}
+                      </Typography>
+                    )}
+                  </Box>
+                </Stack>
               </Box>
             </Grid>
           ))}
