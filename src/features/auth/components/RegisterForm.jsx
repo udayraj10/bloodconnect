@@ -250,7 +250,7 @@ const RegisterForm = ({ updateRegister }) => {
       >
         Already have an account?
         <AuthToggle
-          authName="Sign In"
+          authName="Login"
           updateRegister={updateRegister}
           updateStatus={true}
         />
