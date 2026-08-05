@@ -111,18 +111,27 @@ const BloodRequestDetails = () => {
 
         {requestData.map((item) => (
           <Grid key={item.key} size={{ xs: 6, sm: 4 }}>
-            <Box>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {item.label}
-              </Typography>
-              {item.component === "chip" ? (
-                <Box>
-                  <Chip variant={item.variant}>{item.value}</Chip>
-                </Box>
-              ) : (
-                <Typography variant="body1">{item.value}</Typography>
-              )}
-            </Box>
+            <Stack
+              direction="row"
+              spacing={1.5}
+              sx={{ alignItems: "flex-start" }}
+            >
+              <Box sx={{ fontSize: 20, color: "primary.dark" }}>
+                {item.icon}
+              </Box>
+              <Box>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {item.label}
+                </Typography>
+                {item.component === "chip" ? (
+                  <Box>
+                    <Chip variant={item.variant}>{item.value}</Chip>
+                  </Box>
+                ) : (
+                  <Typography variant="body1">{item.value}</Typography>
+                )}
+              </Box>
+            </Stack>
           </Grid>
         ))}
       </Grid>
