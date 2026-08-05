@@ -7,25 +7,27 @@ import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemText from "@mui/material/ListItemText"
 import Button from "@mui/material/Button"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism"
-import RedeemIcon from "@mui/icons-material/Redeem"
-import ManageSearchIcon from "@mui/icons-material/ManageSearch"
-import BarChartIcon from "@mui/icons-material/BarChart"
 import ListItemIcon from "@mui/material/ListItemIcon"
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined"
 import { useTheme } from "@mui/material/styles"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { useAuth } from "../../context/AuthContext"
+import {
+  AccountCircle,
+  VolunteerActivism,
+  Redeem,
+  ManageSearch,
+  BarChart,
+  Logout,
+} from "../../utils/icons"
 
 const drawerWidth = 240
 
 const menuItems = [
-  { text: "Dashboard", icon: <BarChartIcon />, path: "/" },
-  { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
-  { text: "Requests", icon: <VolunteerActivismIcon />, path: "/requests" },
-  { text: "Offers", icon: <RedeemIcon />, path: "/offers" },
-  { text: "Search", icon: <ManageSearchIcon />, path: "/search" },
+  { text: "Dashboard", icon: <BarChart />, path: "/" },
+  { text: "Profile", icon: <AccountCircle />, path: "/profile" },
+  { text: "Requests", icon: <VolunteerActivism />, path: "/requests" },
+  { text: "Offers", icon: <Redeem />, path: "/offers" },
+  { text: "Search", icon: <ManageSearch />, path: "/search" },
 ]
 
 const Sidebar = ({ isMobileOpen, onToggle }) => {
@@ -127,11 +129,11 @@ const Sidebar = ({ isMobileOpen, onToggle }) => {
             <Button
               onClick={logout}
               variant="outlined"
-              startIcon={<LogoutOutlinedIcon />}
+              startIcon={<Logout />}
               fullWidth
               sx={{ borderWidth: 2 }}
             >
-              Log out
+              Logout
             </Button>
           </Box>
         </Box>
