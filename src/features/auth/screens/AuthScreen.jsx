@@ -42,7 +42,7 @@ const AuthScreen = () => {
         }}
       >
         <Typography variant="body2" color="error" sx={{ fontWeight: 500 }}>
-          *Response may take a moment. Please wait and retry.
+          *Server is under maintainence, please visit after some time.
         </Typography>
         {isRegister ? (
           <LoginForm updateRegister={updateRegister} />
